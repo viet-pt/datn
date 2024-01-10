@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
+
+@tailwind base;
+@tailwind components;
+
+@import './keyframe.scss';
+@import '_styles.scss';
+@import '_mixins.scss';
+
+@tailwind utilities;

@@ -1,0 +1,32 @@
+.ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+  color: #000 !important;
+  font-size: 14px;
+}
+
+.dropdown-form {
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 0 16px;
+  }
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 44px;
+  }
+  .ant-select-single .ant-select-selector {
+    align-items: center;
+  }
+  .ant-select-selection-item {
+    text-align: left;
+  }
+  .ant-select-selection-placeholder {
+    text-align: left;
+    padding-left: 16px;
+  }
+  .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    color: #000 !important;
+    cursor: auto !important;
+    input {
+      cursor: auto !important;
+    }
+  }
+}

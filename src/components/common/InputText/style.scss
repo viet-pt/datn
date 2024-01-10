@@ -1,0 +1,51 @@
+.input-common {
+  .custom-input {
+    border-radius: 6px;
+    position: relative;
+    &:focus + span,
+    &:not(:placeholder-shown) + span{
+      top: 0;
+      transform: unset;
+      left: 16px;
+      font-size: 12px;
+      color: #3aa4f6;
+    }
+  }
+  .placeholder {
+    position: absolute;
+    pointer-events: none;
+    left: 16px;
+    top: 48%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    line-height: 24px;
+    color: #7c808b;
+    transition: 0.3s ease all;
+  }
+  &__help-text {
+    pointer-events: none;
+    color: #a0b4b6;
+    font-size: 13px;
+  }
+  .ant-input {
+    border: 1px solid #d9d9d9 !important;
+    padding: 10px 11px 10px 16px !important;
+    font-size: 14px !important;
+    line-height: 22px !important;
+  }
+  .ant-input[disabled] {
+    color: #000 !important;
+    cursor: auto !important;
+    +.input-common__placeholder {
+      color: rgba(58, 164, 246, 0.6);
+    }
+  }
+}
+
+.input-place .ant-input {
+  padding: 16px 11px 4px 16px !important;
+}
+
+.ant-form-item-explain-error {
+  font-size: 13px;
+}
