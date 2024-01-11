@@ -11,7 +11,6 @@ import {
   WalletOutlined
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import logo from 'assets/images/logo-konec.svg';
 import { ROUTES } from 'global/routes';
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
@@ -33,8 +32,9 @@ const SidebarAnt = () => {
         zIndex: 1000
       }}>
       <NavLink exact to="/" className="block">
-        <div className="border-b border-gray-500 h-16 py-4 text-center">
-          <img className="h-7 mx-auto" src={logo} alt="logo" />
+        <div className="border-b border-gray-500 py-3 text-center">
+          {/* <img className="h-7 mx-auto" src={logo} alt="logo" /> */}
+          <h1 className="medium text-white text-3xl mb-0 mr-3">CyberHub</h1>
         </div>
       </NavLink>
 

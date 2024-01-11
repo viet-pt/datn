@@ -36,8 +36,8 @@ const Category = () => {
       },
       {
         title: 'Ngày tạo',
-        dataIndex: 'createDate',
-        key: 'createDate',
+        dataIndex: 'createTime',
+        key: 'createTime',
       },
       {
         title: 'Action',

@@ -58,21 +58,21 @@ export const FAKE_CATE = [
     cateName: 'Books',
     cateCode: 'BOOKS',
     description: 'Danh mục sách',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
   {
     index: 2,
     cateName: 'Multimedia',
     cateCode: 'MULTIMEDIA',
     description: 'Danh mục giải trí',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
   {
     index: 3,
     cateName: 'Công nghệ',
     cateCode: 'TECH',
     description: 'Danh mục công nghệ',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
 ]
 
@@ -82,21 +82,21 @@ export const FAKE_TYPE = [
     typeName: 'Máy tính',
     typeCode: 'COMPUTER',
     description: 'Danh mục sách',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
   {
     index: 2,
     typeName: 'Multimedia',
     typeCode: 'MULTIMEDIA',
     description: 'Danh mục giải trí',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
   {
     index: 3,
     typeName: 'Công nghệ',
     typeCode: 'TECH',
     description: 'Danh mục công nghệ',
-    createDate: '13:55 27/09/23',
+    createTime: '13:55 27/09/23',
   },
 ]
 

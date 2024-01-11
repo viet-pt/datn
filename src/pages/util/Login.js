@@ -1,6 +1,6 @@
 import { Form } from "antd";
 import { UserService } from "api/UserService";
-import logo from 'assets/images/favicon.ico';
+import logo from 'assets/images/logo.jpg';
 import { InputForm, Notification } from "components/common";
 import { ROUTES } from "global/routes";
 import React from "react";
@@ -56,7 +56,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <img className="mx-auto h-14 w-auto" src={logo} alt="logo" />
+          <img className="mx-auto h-28 w-auto" src={logo} alt="logo" />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>

@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Transition from 'utils/Transition';
-import UserAvatar from 'assets/images/user-avatar-32.png';
 import { faChevronRight, faSignOutAlt } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import UserAvatar from 'assets/images/user-avatar-32.png';
 import { ROUTES } from 'global/routes';
-import { Link, useHistory } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { removeUser } from 'redux/action/userAction';
+import Transition from 'utils/Transition';
 
 function UserMenu() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -54,7 +54,7 @@ function UserMenu() {
       >
         <img className="w-8 h-8 rounded-full" src={UserAvatar} width="32" height="32" alt="User" />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-gray-800 capitalize">{userName.current || 'ADShaman'}</span>
+          <span className="truncate ml-2 text-sm font-medium group-hover:text-gray-800 capitalize">{userName.current || 'CyberHub'}</span>
           <svg className="w-3 h-3 flex-shrink-0 ml-1 fill-current text-gray-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
@@ -77,7 +77,7 @@ function UserMenu() {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200">
-            <div className="font-medium text-gray-800">{userName.current || 'ADShaman'}</div>
+            <div className="font-medium text-gray-800">{userName.current || 'CyberHub'}</div>
             <Link to={ROUTES.PROFILE}>
               <span className="text-xs text-gray-500 mr-1">View profile</span>
               <FontAwesomeIcon icon={faChevronRight} color="#64748B" size="xs" />
