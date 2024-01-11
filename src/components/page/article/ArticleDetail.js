@@ -1,8 +1,8 @@
 import { Form, Modal } from 'antd';
-import { InputForm } from 'components/common';
+import { DropdownForm, InputForm } from 'components/common';
 import React, { useEffect } from 'react';
 
-const ArticleDetail = ({ data, visible, closeModal }) => {
+const ArticleDetail = ({ data, cateList, visible, closeModal }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -19,6 +19,14 @@ const ArticleDetail = ({ data, visible, closeModal }) => {
       width={1400}
     >
       <Form form={form}>
+        <div className='w-1/3 mb-3'>
+          <DropdownForm
+            name='category'
+            list={cateList}
+            title="Danh mục"
+            disabled
+          />
+        </div>
         <InputForm
           isRequired disabled
           name="title"

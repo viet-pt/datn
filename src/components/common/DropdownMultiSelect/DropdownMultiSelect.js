@@ -1,6 +1,6 @@
+import { Form, Select, Tag } from 'antd';
 import React from 'react';
 import './style.scss';
-import { Form, Select, Tag } from 'antd';
 
 const { Option } = Select;
 
@@ -30,7 +30,7 @@ const DropdownMultiSelect = ({ list, disabled, placeholder, customClass, isRequi
     rules = [
       {
         required: true,
-        message: 'Required field cannot be left blank',
+        message: 'Field is required',
       },
       ...rules,
     ]

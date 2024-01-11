@@ -1,18 +1,22 @@
 import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Upload } from 'antd';
-import { InputForm, KCSModal, Notification } from 'components/common';
+import { DropdownForm, InputForm, KCSModal, Notification } from 'components/common';
+import { FAKE_CATE } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const NewArticle = () => {
   const [openConfirmModal, setOpenConfirmModal] = useState();
+  const [cateList, setCateList] = useState([]);
   const editor = useRef();
   const history = useHistory();
   const [form] = Form.useForm();
 
   useEffect(() => {
+    const cates = FAKE_CATE.map(item => ({ value: item.cateCode, text: item.cateName }));
+    setCateList(cates);
     ClassicEditor.create(document.querySelector('#editorCreate'))
       .then(newEditor => {
         newEditor.ui.view.editable.element.style.height = '300px';
@@ -65,13 +69,13 @@ const NewArticle = () => {
           <Button type="link" className='bg-gray-200 text-black py-4 px-8' onClick={onCancel}>Cancel</Button>
           <Button type="primary" htmlType='submit' className='bg-green-500 py-4 px-8'>Submit</Button>
         </div>
-        <div className='mb-4 flex'>
+        <div className='flex mb-4'>
           <Form.Item
             name="img"
             label="Image"
             rules={[{
               required: true,
-              message: 'Required field cannot be left blank'
+              message: 'Field is required'
             }]}
             getValueFromEvent={handleFile}
           >
@@ -80,6 +84,15 @@ const NewArticle = () => {
             </Upload>
           </Form.Item>
         </div>
+
+        <div className='w-1/4'>
+          <DropdownForm
+            name='category'
+            list={cateList}
+            title="Danh mục"
+          />
+        </div>
+
         <div className='grid grid-cols-2 gap-5'>
           <InputForm
             isRequired

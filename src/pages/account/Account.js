@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
 import { Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const Account = () => {
   const [accountList, setAccountList] = useState([]);
@@ -49,6 +49,7 @@ const Account = () => {
       <Table
         columns={columnsRole}
         dataSource={accountList}
+        rowKey="index"
       />
     </div>
   )

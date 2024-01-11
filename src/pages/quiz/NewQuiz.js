@@ -1,14 +1,20 @@
 import { faPlusCircle } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form } from 'antd';
-import { InputForm, KCSModal } from 'components/common';
-import QuizRadio from 'components/page/quiz/QuizRadio';
+import { KCSModal, Notification } from 'components/common';
+import QuizItem from 'components/page/quiz/QuizItem';
+import { TYPE_QUIZ } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+const typeList = [
+  { value: 'TECH', text: 'Công nghệ' },
+  { value: 'COMPUTER', text: 'Máy tính' },
+  { value: 'MEDIA', text: 'Media' },
+]
+
 const NewQuiz = () => {
-  const [quizList, setQuizList] = useState([]);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const history = useHistory();
   const [form] = Form.useForm();
@@ -18,9 +24,11 @@ const NewQuiz = () => {
   }, []);
 
   const handleSubmit = (values) => {
-    const data = {
-      ...values,
-    }
+    const data = values.data;
+    data.forEach(item => {
+      item.type = item.correctAnswer.length > 1 ? TYPE_QUIZ.MULTI : TYPE_QUIZ.SINGLE;
+    });
+    Notification.success('Thêm câu hỏi thành công!')
     console.log(1111, data);
     // history.push(ROUTES.QUIZ_MANAGEMENT);
   };
@@ -43,16 +51,7 @@ const NewQuiz = () => {
           <Button type="primary" htmlType='submit' className='bg-green-500 py-4 px-8'>Submit</Button>
         </div>
 
-        <div className='w-1/2 p-3 bg-gray-50 rounded-lg'>
-          <InputForm
-            isRequired
-            name="title"
-            title="Tiêu đề"
-            placeholder="Nhập tiêu đề"
-          />
-        </div>
-
-        <div className='w-1/2 p-3 bg-gray-50 rounded-lg mt-6 text-base medium'>
+        <div className='w-2/3 p-4 bg-gray-50 rounded-lg text-base medium'>
           <p>Danh sách câu hỏi</p>
 
           <Form.List name="data" initialValue={[
@@ -62,10 +61,12 @@ const NewQuiz = () => {
               return (
                 <div>
                   {fields.map((field, index) => (
-                    <div key={field.key} className='mb-3'>
-                      <QuizRadio
+                    <div key={field.key} className='mb-4'>
+                      <QuizItem
                         index={index}
                         fields={fields}
+                        form={form}
+                        typeList={typeList}
                         onDelete={() => remove(field.name)}
                       />
                     </div>

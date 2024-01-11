@@ -14,6 +14,11 @@ export const STATUS = {
   REJECTED: 'Rejected',
 }
 
+export const TYPE_QUIZ = {
+  'SINGLE': 'SINGLE',
+  'MULTI': 'MULTI',
+}
+
 export const ORDER_LIST = [
   {
     index: 1,
@@ -22,6 +27,7 @@ export const ORDER_LIST = [
     numberParticipant: 20,
     passNumber: 15,
     failNumber: 5,
+    category: 'COMPUTER',
     status: 0,
   },
   {
@@ -31,6 +37,7 @@ export const ORDER_LIST = [
     numberParticipant: 0,
     passNumber: 0,
     failNumber: 0,
+    category: 'MULTIMEDIA',
     status: 0,
   },
   {
@@ -40,7 +47,56 @@ export const ORDER_LIST = [
     numberParticipant: 30,
     passNumber: 20,
     failNumber: 10,
+    category: 'MULTIMEDIA',
     status: 0,
+  },
+]
+
+export const FAKE_CATE = [
+  {
+    index: 1,
+    cateName: 'Books',
+    cateCode: 'BOOKS',
+    description: 'Danh mục sách',
+    createDate: '13:55 27/09/23',
+  },
+  {
+    index: 2,
+    cateName: 'Multimedia',
+    cateCode: 'MULTIMEDIA',
+    description: 'Danh mục giải trí',
+    createDate: '13:55 27/09/23',
+  },
+  {
+    index: 3,
+    cateName: 'Công nghệ',
+    cateCode: 'TECH',
+    description: 'Danh mục công nghệ',
+    createDate: '13:55 27/09/23',
+  },
+]
+
+export const FAKE_TYPE = [
+  {
+    index: 1,
+    typeName: 'Máy tính',
+    typeCode: 'COMPUTER',
+    description: 'Danh mục sách',
+    createDate: '13:55 27/09/23',
+  },
+  {
+    index: 2,
+    typeName: 'Multimedia',
+    typeCode: 'MULTIMEDIA',
+    description: 'Danh mục giải trí',
+    createDate: '13:55 27/09/23',
+  },
+  {
+    index: 3,
+    typeName: 'Công nghệ',
+    typeCode: 'TECH',
+    description: 'Danh mục công nghệ',
+    createDate: '13:55 27/09/23',
   },
 ]
 
@@ -91,6 +147,7 @@ export const ARTICLE_LIST = [
     index: 1,
     id: '123',
     status: 1,
+    category: 'BOOKS',
     convertStatus: STATUS.COMPLETE,
     convertCreateTime: '05/10/23 14:20',
     img: 'https://xehay.vn/uploads/images/2023/10/01/xehay_Tesla%203_051023_3.jpg',
@@ -133,6 +190,7 @@ export const ARTICLE_LIST = [
     id: '123',
     status: 0,
     convertStatus: STATUS.INIT,
+    category: 'TECH',
     convertCreateTime: '03/10/23 21:25',
     img: 'https://xehay.vn/uploads/images/2023/10/01/xehay-hyper-urban-031023%20(6).jpg',
     title: 'Hyper Urban: Mẫu xe concept thể hiện tương lai điện hóa của Nissan',

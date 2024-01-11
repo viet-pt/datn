@@ -1,26 +1,28 @@
+import { Form, Select } from 'antd';
+import cn from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 import './style.scss';
-import { Form, Select } from 'antd';
-import PropTypes from 'prop-types';
 
 const { Option } = Select;
 
-const DropdownForm = ({ placeholder, title, list, customClass, isRequired, handleChange, disabled, ...props }) => {
+const DropdownForm = ({ placeholder, title, list, customClass, isRequired, handleChange,
+  disabled, isOneLine, ...props }) => {
 
   let rules = [];
   if (isRequired) {
     rules = [
       {
         required: true,
-        message: 'Required field cannot be left blank',
+        message: 'Field is required',
       },
       ...rules,
     ]
   }
 
   return (
-    <div>
-      {title && <p className='mb-1'>{title}:</p>}
+    <div className={cn({ 'flex items-center': isOneLine })}>
+      {title && <p className='mb-1'>{isRequired && <span className='text-red-500'>*</span>} {title}</p>}
       <Form.Item className={`dropdown-form ${customClass || ''}`} rules={rules} {...props}>
         <Select placeholder={placeholder} onChange={handleChange} disabled={disabled}>
           {list.map((item, index) => (
@@ -38,6 +40,7 @@ DropdownForm.propTypes = {
 
 DropdownForm.defaultProps = {
   list: [],
+  isRequired: true
 };
 
 export default React.memo(DropdownForm);

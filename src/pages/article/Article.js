@@ -6,7 +6,7 @@ import { Queries } from 'api/queries';
 import { KCSModal, Notification } from 'components/common';
 import ArticleDetail from 'components/page/article/ArticleDetail';
 import EditArticle from 'components/page/article/EditArticle';
-import { ARTICLE_LIST } from 'constants/constants';
+import { ARTICLE_LIST, FAKE_CATE } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -22,6 +22,7 @@ const ACTION_TYPE = {
 
 const Article = () => {
   const [articleList, setArticleList] = useState(ARTICLE_LIST); //fake
+  const [cateList, setCateList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [tab, setTab] = useState(0);
@@ -39,6 +40,11 @@ const Article = () => {
       setTotalPage(orderData.totalItems);
     }
   }, [orderData])
+
+  useEffect(() => {
+    getCateList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { mutate: updateStatusOrder } = useMutation(UserService.updateStatusOrder, {
     onSuccess: (res) => {
@@ -97,12 +103,19 @@ const Article = () => {
         title: 'Tiêu đề',
         key: 'title',
         dataIndex: 'title',
+        width: '25%',
         render: (row, record) => <span className='underline pointer text-blue-500' onClick={() => viewDetail(record)}>{row}</span>
       },
       {
         title: 'Mô tả',
         key: 'description',
         dataIndex: 'description',
+        width: '25%',
+      },
+      {
+        title: 'Danh mục',
+        key: 'category',
+        dataIndex: 'category',
       },
       {
         title: 'Thumbnail',
@@ -155,6 +168,12 @@ const Article = () => {
     setPageIndex(page - 1);
   }
 
+  const getCateList = () => {
+    if (cateList.length) return;
+    const cates = FAKE_CATE.map(item => ({ value: item.cateCode, text: item.cateName }));
+    setCateList(cates);
+  }
+
   return (
     <div>
       <div className='flex-between'>
@@ -186,6 +205,7 @@ const Article = () => {
                   columns={columnsTable}
                   dataSource={articleList}
                   pagination={false}
+                  rowKey="index"
                 />
               </div>
 
@@ -204,6 +224,7 @@ const Article = () => {
       {openEditModal &&
         <EditArticle
           data={orderSelected}
+          cateList={cateList}
           visible={openEditModal}
           closeModal={() => setOpenEditModal(false)}
           confirmAction={onEdit}
@@ -213,6 +234,7 @@ const Article = () => {
       {openDetailModal &&
         <ArticleDetail
           data={orderSelected}
+          cateList={cateList}
           visible={openDetailModal}
           closeModal={() => setOpenDetailModal(false)}
         />

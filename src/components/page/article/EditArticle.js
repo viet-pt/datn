@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, Form, Modal, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { InputForm, Notification } from 'components/common';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Button, Form, Modal, Upload } from 'antd';
+import { DropdownForm, InputForm, Notification } from 'components/common';
+import React, { useEffect, useRef } from 'react';
 
-const EditArticle = ({ data, visible, closeModal, confirmAction }) => {
+const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => {
   const [form] = Form.useForm();
   const editor = useRef();
 
@@ -58,6 +58,14 @@ const EditArticle = ({ data, visible, closeModal, confirmAction }) => {
       width={1400}
     >
       <Form onFinish={handleSubmit} form={form}>
+        <div className='w-1/3 mb-3'>
+          <DropdownForm
+            name='category'
+            list={cateList}
+            title="Danh mục"
+          />
+        </div>
+
         <InputForm
           isRequired
           name="title"
@@ -76,7 +84,7 @@ const EditArticle = ({ data, visible, closeModal, confirmAction }) => {
             label="Image"
             rules={[{
               required: true,
-              message: 'Required field cannot be left blank'
+              message: 'Field is required'
             }]}
             getValueFromEvent={handleFile}
           >

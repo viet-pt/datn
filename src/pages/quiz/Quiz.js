@@ -3,7 +3,7 @@ import Search from 'antd/lib/input/Search';
 import { UserService } from 'api/UserService';
 import { Queries } from 'api/queries';
 import { KCSModal, Notification } from 'components/common';
-import { ORDER_LIST, STATUS } from 'constants/constants';
+import { FAKE_TYPE, ORDER_LIST, STATUS } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -21,6 +21,7 @@ const TAB_LIST = ['Đang hiển thị', 'Đang ẩn'];
 
 const Quiz = () => {
   const [orderList, setOrderList] = useState(ORDER_LIST); //fake
+  const [typeList, setTypeList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [tab, setTab] = useState(0);
@@ -38,6 +39,17 @@ const Quiz = () => {
       setTotalPage(orderData.totalItems);
     }
   }, [orderData])
+
+  useEffect(() => {
+    getTypeList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const getTypeList = () => {
+    if (typeList.length) return;
+    const types = FAKE_TYPE.map(item => ({ value: item.typeCode, text: item.typeName }));
+    setTypeList(types);
+  }
 
   const { mutate: updateStatusOrder } = useMutation(UserService.updateStatusOrder, {
     onSuccess: (res) => {
@@ -57,10 +69,6 @@ const Quiz = () => {
     setOrderSelected(data);
     setOpenDetailModal(true);
   }, [setOrderSelected])
-
-  const viewParticipant = useCallback((data) => {
-    console.log(111, data);
-  }, [])
 
   const changeStatus = useCallback((type, row) => {
     setOrderSelected(row);
@@ -104,6 +112,11 @@ const Quiz = () => {
           onClick={() => viewDetailQuiz(row)}>{value}</span>
       },
       {
+        title: 'Thể loại',
+        key: 'category',
+        dataIndex: 'category',
+      },
+      {
         title: 'Ngày tạo',
         key: 'createTime',
         dataIndex: 'convertCreateTime',
@@ -113,8 +126,6 @@ const Quiz = () => {
         title: 'Số lượt đã thi',
         key: 'numberParticipant',
         dataIndex: 'numberParticipant',
-        render: (value, row) => value ? <span className='underline pointer text-blue-500 hover:text-green-500'
-          onClick={() => viewParticipant(row)}>{value}</span> : value
       },
       {
         title: 'Số lượt pass',
@@ -131,6 +142,8 @@ const Quiz = () => {
         key: 'action',
         render: (row) =>
           <div className='flex space-x-3 items-center'>
+            <Button type="primary" className='hover-raise bg-blue-400 border-none'
+              onClick={() => changeStatus(ACTION_TYPE.EDIT, row)}>Edit</Button>
             {tab === 0 &&
               <Button type="primary" className='hover-raise bg-prime-red border-none' danger onClick={() => changeStatus(ACTION_TYPE.HIDE, row)}>Hide</Button>
             }
@@ -140,7 +153,7 @@ const Quiz = () => {
           </div>
       },
     ]
-  ), [viewDetailQuiz, viewParticipant, changeStatus, tab, pageIndex])
+  ), [viewDetailQuiz, changeStatus, tab, pageIndex])
 
   const onSearch = (data) => {
 
@@ -189,6 +202,7 @@ const Quiz = () => {
                   columns={columnsTable}
                   dataSource={orderList}
                   pagination={false}
+                  rowKey="index"
                 />
               </div>
 
