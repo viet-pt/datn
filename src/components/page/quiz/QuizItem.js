@@ -2,10 +2,9 @@ import { faTimes } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Input, Select } from 'antd';
 import { DropdownForm } from 'components/common';
+import { TITLE_ANS } from 'constants/constants';
 import React, { useState } from 'react';
 const { Option } = Select;
-
-const TITLE_ANS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 const QuizItem = ({ fields, form, index, onDelete, typeList }) => {
   const [numbAns, setNumberAns] = useState(4);

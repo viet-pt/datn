@@ -2,13 +2,15 @@ import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Upload } from 'antd';
 import { DropdownForm, InputForm, KCSModal, Notification } from 'components/common';
+import MyCustomUploadAdapterPlugin from 'components/common/UploadAdapter/UploadAdapter';
 import { FAKE_CATE } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const NewArticle = () => {
-  const [openConfirmModal, setOpenConfirmModal] = useState();
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [cateList, setCateList] = useState([]);
   const editor = useRef();
   const history = useHistory();
@@ -17,7 +19,9 @@ const NewArticle = () => {
   useEffect(() => {
     const cates = FAKE_CATE.map(item => ({ value: item.cateCode, text: item.cateName }));
     setCateList(cates);
-    ClassicEditor.create(document.querySelector('#editorCreate'))
+    ClassicEditor.create(document.querySelector('#editorCreate'), {
+      extraPlugins: [MyCustomUploadAdapterPlugin],
+    })
       .then(newEditor => {
         newEditor.ui.view.editable.element.style.height = '300px';
         editor.current = newEditor;
@@ -57,6 +61,10 @@ const NewArticle = () => {
     setOpenConfirmModal(true);
   }
 
+  const onPreview = () => {
+    setOpenPreviewModal(true);
+  }
+
   const removeFile = () => {
     form.setFieldsValue({ img: '' });
   }
@@ -85,12 +93,15 @@ const NewArticle = () => {
           </Form.Item>
         </div>
 
-        <div className='w-1/4'>
-          <DropdownForm
-            name='category'
-            list={cateList}
-            title="Danh mục"
-          />
+        <div className='flex-between'>
+          <div className='w-1/4'>
+            <DropdownForm
+              name='category'
+              list={cateList}
+              title="Danh mục"
+            />
+          </div>
+          <Button type="primary" className='bg-prime-orange border-none py-4 px-8' onClick={onPreview}>Xem trước</Button>
         </div>
 
         <div className='grid grid-cols-2 gap-5'>

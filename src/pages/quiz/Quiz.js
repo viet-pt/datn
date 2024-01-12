@@ -3,13 +3,14 @@ import Search from 'antd/lib/input/Search';
 import { UserService } from 'api/UserService';
 import { Queries } from 'api/queries';
 import { KCSModal, Notification } from 'components/common';
-import { FAKE_TYPE, ORDER_LIST, STATUS } from 'constants/constants';
+import QuizDetail from 'components/page/quiz/QuizDetail';
+import QuizEdit from 'components/page/quiz/QuizEdit';
+import { FAKE_TYPE, ORDER_LIST } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
-import EditModal from './EditModal';
 
 const ACTION_TYPE = {
   SHOW: 'SHOW',
@@ -105,9 +106,9 @@ const Quiz = () => {
         render: (row) => <span>{pageIndex * 10 + row}</span>,
       },
       {
-        title: 'Tên quiz',
-        dataIndex: 'quizName',
-        key: 'quizName',
+        title: 'Câu hỏi',
+        dataIndex: 'question',
+        key: 'question',
         render: (value, row) => <span className='underline pointer text-blue-500 hover:text-green-500'
           onClick={() => viewDetailQuiz(row)}>{value}</span>
       },
@@ -122,11 +123,11 @@ const Quiz = () => {
         dataIndex: 'convertCreateTime',
         sorter: (a, b) => moment(a.convertCreateTime, 'hh:mm DD/MM/YY').unix() - moment(b.convertCreateTime, 'hh:mm DD/MM/YY').unix()
       },
-      {
-        title: 'Số lượt đã thi',
-        key: 'numberParticipant',
-        dataIndex: 'numberParticipant',
-      },
+      // {
+      //   title: 'Số lượt đã thi',
+      //   key: 'numberParticipant',
+      //   dataIndex: 'numberParticipant',
+      // },
       {
         title: 'Số lượt pass',
         key: 'passNumber',
@@ -224,29 +225,17 @@ const Quiz = () => {
         title="Chi tiết"
         closeModal={() => setOpenDetailModal(false)}
         confirmButton='Đóng'
-        content={
-          <div className='grid grid-cols-2 gap-x-5 gap-y-2'>
-            <p>Mã đơn hàng: <span className='medium'>{orderSelected.code}</span></p>
-            <p>Trạng thái: <span className={`medium ${orderSelected.convertStatus === STATUS.COMPLETE ? 'text-prime-green' : orderSelected.convertStatus === STATUS.CANCELED ?
-              'text-red-500' : 'text-prime-yellow'}`}>{orderSelected.convertStatus}</span></p>
-
-            <p>Họ tên: <span className='medium'>{orderSelected.name}</span></p>
-            <p>Số điện thoại: <span className='medium'>{orderSelected.phone}</span></p>
-            <p>CCCD: <span className='medium'>{orderSelected.cccd}</span></p>
-            <p>Email: <span className='medium'>{orderSelected.email}</span></p>
-
-            <p>Tỉnh thành: <span className='medium'>{orderSelected.province}</span></p>
-            <p>Đại lý: <span className='medium'>{orderSelected.agency}</span></p>
-          </div>
-        }
+        content={<QuizDetail data={orderSelected} />}
       />
 
-      <EditModal
-        data={orderSelected}
-        visible={openEditModal}
-        closeModal={() => setOpenEditModal(false)}
-        confirmAction={onEdit}
-      />
+      {openEditModal &&
+        <QuizEdit
+          data={orderSelected}
+          visible={openEditModal}
+          closeModal={() => setOpenEditModal(false)}
+          confirmAction={onEdit}
+        />
+      }
 
       <KCSModal
         isOpenModal={openShowModal}

@@ -322,7 +322,7 @@ body > iframe[style*='2147483647']{
   }
   .ant-modal-body {
     max-height: 75vh;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .ant-modal-footer {
     @apply flex justify-center;
@@ -330,4 +330,8 @@ body > iframe[style*='2147483647']{
       margin-right: 5%;
     }
   }
+}
+
+.z-1000 {
+  z-index: 1000;
 }

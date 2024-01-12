@@ -5,14 +5,12 @@ export const STATUS = {
   PENDING: 'Pending',
   INPROGRESS: 'Inprogress',
   COMPLETE: 'Complete',
-  PARTITAL: 'Partital',
   PROCESSING: 'Processing',
   CANCELED: 'Canceled',
-
-  WAIT_CONFIRM: 'Wait confirm',
-  CONFIRMED: 'Confirmed',
   REJECTED: 'Rejected',
 }
+
+export const TITLE_ANS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export const TYPE_QUIZ = {
   'SINGLE': 'SINGLE',
@@ -22,9 +20,16 @@ export const TYPE_QUIZ = {
 export const ORDER_LIST = [
   {
     index: 1,
-    quizName: 'Nội dung kiểm tra giữa kỳ',
+    question: 'Phần mềm ngăn chặn hành vi:',
+    answer: [
+      { label: 'Theo dõi các hành vi trong thời gian thực của hệ thống' },
+      { label: 'Phát hiện code có hại trước khi chúng thực hiện' },
+      { label: 'Theo dõi các tham số của hệ thống' },
+      { label: 'Tất cả đều đúng' },
+    ],
+    correctAnswer: ['B'],
+    type: "MULTI",
     convertCreateTime: '13:55 27/09/23',
-    numberParticipant: 20,
     passNumber: 15,
     failNumber: 5,
     category: 'COMPUTER',
@@ -32,22 +37,19 @@ export const ORDER_LIST = [
   },
   {
     index: 2,
-    quizName: 'AN TOÀN THÔNG TIN KẾ TOÁN',
+    question: 'Mối đe dọa hoặc Nguy cơ là gì?',
+    answer: [
+      { label: 'Theo dõi các hành vi trong thời gian thực của hệ thống' },
+      { label: 'Phát hiện code có hại trước khi chúng thực hiện' },
+      { label: 'Theo dõi các tham số của hệ thống' },
+      { label: 'Tất cả đều đúng' },
+    ],
+    correctAnswer: ['A', 'B'],
+    type: "MULTI",
     convertCreateTime: '13:55 27/09/23',
-    numberParticipant: 0,
-    passNumber: 0,
-    failNumber: 0,
-    category: 'MULTIMEDIA',
-    status: 0,
-  },
-  {
-    index: 2,
-    quizName: 'Câu hỏi trắc nghiệm an ninh thông tin trong chuyển đổi số',
-    convertCreateTime: '13:55 27/09/23',
-    numberParticipant: 30,
-    passNumber: 20,
-    failNumber: 10,
-    category: 'MULTIMEDIA',
+    passNumber: 15,
+    failNumber: 5,
+    category: 'COMPUTER',
     status: 0,
   },
 ]
@@ -100,47 +102,33 @@ export const FAKE_TYPE = [
   },
 ]
 
-export const QUIZ_DETAIL = {
-  index: 1,
-  title: 'Nội dung kiểm tra giữa kỳ',
-  status: 0,
-  convertCreateTime: '13:55 27/09/23',
-  numberParticipant: 20,
-  passNumber: 15,
-  failNumber: 5,
-  data: [
-    {
-      question: 'Phần mềm ngăn chặn hành vi:',
-      answer: [
-        { value: 1, label: 'Theo dõi các hành vi trong thời gian thực của hệ thống' },
-        { value: 2, label: 'Phát hiện code có hại trước khi chúng thực hiện' },
-        { value: 3, label: 'Theo dõi các tham số của hệ thống' },
-        { value: 4, label: 'Tất cả đều đúng' },
-      ],
-      correctAnswer: 4,
-    },
-    {
-      question: 'Mối đe dọa hoặc Nguy cơ là gì?',
-      answer: [
-        { value: 1, label: 'Là những sự kiện có khả năng ảnh hưởng đến an toàn của hệ thống.' },
-        { value: 2, label: 'Là những sự kiện sử dụng các kỹ thuật vào hệ thống.' },
-        { value: 3, label: 'Cả 2 đều sai.' },
-        { value: 4, label: 'Cả 2 đều đúng.' },
-      ],
-      correctAnswer: 1,
-    },
-    {
-      question: 'Thiết bị nào sử dụng bộ lọc gói và các quy tắc truy cập để kiểm soát truy cập đến các mạng riêng từ các mạng công cộng , như là Internet?',
-      answer: [
-        { value: 1, label: 'Điểm truy cập không dây' },
-        { value: 2, label: 'Router' },
-        { value: 3, label: 'Tường lửa' },
-        { value: 4, label: 'Switch' },
-      ],
-      correctAnswer: 3,
-    },
-  ]
-}
+export const FAKE_ACCOUNT = [
+  {
+    index: 1,
+    id: '123abc',
+    email: 'aaa@gmail.com',
+    name: 'Nguyen A',
+    google_id: 'Abcxyz',
+    create_at: '13:55 27/09/23',
+  },
+  {
+    index: 2,
+    id: '345BBB',
+    email: 'bbb@gmail.com',
+    name: 'Nguyen B',
+    google_id: 'Abcxyz12',
+    create_at: '13:55 27/09/23',
+  },
+  {
+    index: 3,
+    id: '123abc',
+    email: 'ccc@gmail.com',
+    name: 'Nguyen C',
+    google_id: 'Abcxyz56',
+    create_at: '13:55 27/09/23',
+  },
+  
+]
 
 export const ARTICLE_LIST = [
   {
@@ -233,20 +221,4 @@ export const ARTICLE_LIST = [
     </div>
 </div>`
   },
-]
-
-export const PROVINCES = [
-  { value: '29', text: 'Hà Nội' },
-  { value: '15', text: 'Hải Phòng' },
-  { value: '17', text: 'Thái Bình' },
-  { value: '59', text: 'TP HCM' },
-  { value: '55', text: 'Đà Nẵng' },
-]
-
-export const AGENCIES = [
-  { value: '1', text: 'Đại lý 1' },
-  { value: '2', text: 'Đại lý 2' },
-  { value: '3', text: 'Đại lý 3' },
-  { value: '4', text: 'Đại lý 4' },
-  { value: '5', text: 'Đại lý 5' },
 ]

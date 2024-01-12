@@ -2,9 +2,10 @@ import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Modal, Upload } from 'antd';
 import { DropdownForm, InputForm, Notification } from 'components/common';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => {
+  const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [form] = Form.useForm();
   const editor = useRef();
 
@@ -48,6 +49,10 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
     confirmAction(data);
   }
 
+  const onPreview = () => {
+    setOpenPreviewModal(true);
+  }
+
   return (
     <Modal
       className="modal-wrapper"
@@ -55,16 +60,20 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
       open={visible}
       onCancel={closeModal}
       footer={null}
-      width={1400}
+      width={1500}
     >
       <Form onFinish={handleSubmit} form={form}>
-        <div className='w-1/3 mb-3'>
-          <DropdownForm
-            name='category'
-            list={cateList}
-            title="Danh mục"
-          />
+        <div className='flex-between mb-3'>
+          <div className='w-1/3'>
+            <DropdownForm
+              name='category'
+              list={cateList}
+              title="Danh mục"
+            />
+          </div>
+          <Button type="primary" className='bg-prime-orange border-none py-4 px-8' onClick={onPreview}>Xem trước</Button>
         </div>
+
 
         <InputForm
           isRequired
@@ -101,7 +110,7 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
           <div id="editorEdit"></div>
         </div>
 
-        <div className="flex justify-center space-x-4 mt-6 absolute bottom-0 left-0 rounded-b-lg py-4 w-full bg-white shadow-md">
+        <div className="flex justify-center space-x-4 mt-6 absolute bottom-0 left-0 rounded-b-lg py-4 w-full bg-white shadow-md z-1000">
           <Button key="cancel" onClick={closeModal}>Hủy</Button>
           <Form.Item>
             <Button key="ok" type="primary" htmlType="submit">Xác nhận</Button>

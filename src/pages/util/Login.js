@@ -1,12 +1,12 @@
 import { Form } from "antd";
 import { UserService } from "api/UserService";
-import logo from 'assets/images/logo.jpg';
+import logo from 'assets/images/logo.png';
 import { InputForm, Notification } from "components/common";
 import { ROUTES } from "global/routes";
 import React from "react";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { fetchUser } from "redux/action/userAction";
 import Cookies from 'universal-cookie';
 
@@ -78,17 +78,6 @@ const Login = () => {
                 name="password"
                 placeholder="Password"
               />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <Link
-                to={ROUTES.FORGOT_PASSWORD}
-                className="font-medium text-sm text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </Link>
             </div>
           </div>
 

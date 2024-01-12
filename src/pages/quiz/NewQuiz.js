@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const typeList = [
-  { value: 'TECH', text: 'Công nghệ' },
+  { value: 'TECH', text: 'Công nghệ và đời sống' },
   { value: 'COMPUTER', text: 'Máy tính' },
   { value: 'MEDIA', text: 'Media' },
 ]

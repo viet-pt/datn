@@ -33,7 +33,6 @@ const SidebarAnt = () => {
       }}>
       <NavLink exact to="/" className="block">
         <div className="border-b border-gray-500 py-3 text-center">
-          {/* <img className="h-7 mx-auto" src={logo} alt="logo" /> */}
           <h1 className="medium text-white text-3xl mb-0 mr-3">CyberHub</h1>
         </div>
       </NavLink>
@@ -61,8 +60,8 @@ const SidebarAnt = () => {
             <Link to={ROUTES.STATISTICAL_QUIZ}>Thống kê trắc nghiệm</Link></Menu.Item>
         </SubMenu>
 
-        <Menu.Item key="user" icon={<UserOutlined />} title='Quản lý user'>
-          <Link to={ROUTES.USER}>Quản lý user</Link></Menu.Item>
+        <Menu.Item key="user" icon={<UserOutlined />} title='Quản lý tài khoản'>
+          <Link to={ROUTES.MANAGE_ACCOUNT}>Quản lý tài khoản</Link></Menu.Item>
       </Menu>
     </Sider>
   );

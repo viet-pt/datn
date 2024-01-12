@@ -14,7 +14,6 @@ export const ROUTES = {
   CREATE_QUIZ: '/create-quiz',
   QUIZ_TYPE: '/quiz-type',
   MANAGE_ACCOUNT: '/manage-account',
-  USER: '/user',
   DASHBOARDS: '/dashboards',
 }
 

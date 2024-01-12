@@ -1,22 +1,14 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
 import { ROUTES } from 'global/routes';
-import Login from './util/Login';
-import ForgotPassword from './util/ForgotPassword';
-import MainPage from './MainPage';
 import { useSelector } from 'react-redux';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import MainPage from './MainPage';
+import Login from './util/Login';
 
 function AppWrapper() {
   const authorized = useSelector(state => state.userReducer.authorized);
 
   return (
     <Switch>
-      <Route
-        path={ROUTES.FORGOT_PASSWORD}
-        component={ForgotPassword}
-        exact
-      />
-
       <Route path={ROUTES.LOGIN} exact>
         {authorized ? <Redirect to={ROUTES.HOME_PAGE} /> : <Login />}
       </Route>

@@ -67,7 +67,7 @@ const MainPage = () => {
             </Suspense>
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>© Konec Co., Ltd - ĐKKD số 0108146759 - Ngày đăng ký: 27/01/2018 - Trụ sở: Đông Mỹ - Thanh Trì - Hà Nội - Người đại diện: Nguyễn Thu Hà</Footer>
+        <Footer style={{ textAlign: 'center' }}>© CyberHub VN - Trụ sở: Hà Nội - Người đại diện: Nguyễn Hữu Cường</Footer>
       </Layout>
     </Layout>
   );
