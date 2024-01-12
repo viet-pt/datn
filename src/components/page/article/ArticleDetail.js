@@ -46,7 +46,7 @@ const ArticleDetail = ({ data, cateList, visible, closeModal }) => {
 
         <div className='mt-5'>
           <p className='mb-5'><span className='text-red-500'>*</span> Content:</p>
-          <div className="" dangerouslySetInnerHTML={{ __html: data.content }}></div>
+          <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
         </div>
       </Form>
     </Modal>

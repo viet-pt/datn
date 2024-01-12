@@ -3,6 +3,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Upload } from 'antd';
 import { DropdownForm, InputForm, KCSModal, Notification } from 'components/common';
 import MyCustomUploadAdapterPlugin from 'components/common/UploadAdapter/UploadAdapter';
+import NewsDemo from 'components/page/article/NewsDemo';
 import { FAKE_CATE } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 const NewArticle = () => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [newsData, setNewsData] = useState('');
   const [cateList, setCateList] = useState([]);
   const editor = useRef();
   const history = useHistory();
@@ -62,6 +64,11 @@ const NewArticle = () => {
   }
 
   const onPreview = () => {
+    let data = {
+      ...form.getFieldsValue(),
+      content: editor.current.getData()
+    }
+    setNewsData(data);
     setOpenPreviewModal(true);
   }
 
@@ -120,6 +127,14 @@ const NewArticle = () => {
         <p className='mb-2'><span className='text-red-500'>*</span> Content</p>
         <div id="editorCreate"></div>
       </Form>
+
+      {openPreviewModal &&
+        <NewsDemo
+          data={newsData}
+          visible={openPreviewModal}
+          closeModal={() => setOpenPreviewModal(false)}
+        />
+      }
 
       <KCSModal
         isOpenModal={openConfirmModal}

@@ -3,9 +3,11 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Modal, Upload } from 'antd';
 import { DropdownForm, InputForm, Notification } from 'components/common';
 import React, { useEffect, useRef, useState } from 'react';
+import NewsDemo from './NewsDemo';
 
 const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => {
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [newsData, setNewsData] = useState('');
   const [form] = Form.useForm();
   const editor = useRef();
 
@@ -50,6 +52,11 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
   }
 
   const onPreview = () => {
+    let data = {
+      ...form.getFieldsValue(),
+      content: editor.current.getData()
+    }
+    setNewsData(data);
     setOpenPreviewModal(true);
   }
 
@@ -117,6 +124,14 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
           </Form.Item>
         </div>
       </Form>
+
+      {openPreviewModal &&
+        <NewsDemo
+          data={newsData}
+          visible={openPreviewModal}
+          closeModal={() => setOpenPreviewModal(false)}
+        />
+      }
     </Modal>
 
   )

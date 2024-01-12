@@ -5,9 +5,6 @@ module.exports = {
   important: true,
   theme: {
     extend: {
-      textColor: {
-        primary: '#434761',
-      },
       backgroundColor: theme => ({
         ...theme('colors'),
         'primary': '#1C60B3',
@@ -20,27 +17,12 @@ module.exports = {
         '2xl': '1px 5px 35px 1px #949494'
       },
       colors: {
-        'prime-purple': 'rgb(154, 31, 243)',
-        'second-purple': '#8736f3',
-        'third-purple': '#890862',
-        'prime-blue': '#1663c3',
-        'second-blue': '#2272d6',
-        'origin-blue': '#0000ff',
-        'light-blue': '#229ed9',
         'prime-orange': '#FF8929',
         'second-orange': '#F36A2B',
         'prime-yellow': '#eab215',
         'prime-red': '#f35151',
-        'prime-pink': '#da332e',
-        'light-pink': '#ec808d',
         'prime-green': '#3ecf8e',
-        'prime-gray': '#f2f2f2',
-        'teal': '#02a7f0',
-        'dark-teal': '#026d9b',
-        'prime-teal': '#00bfbf',
-        'blue-zalo': '#008be6',
-        'violet': '#8b32f4',
-        'prime-violet': '#8b32f4',
+        'prime-black': '#444444',
         'light-red': '#d9001b',
       },
       outline: {
