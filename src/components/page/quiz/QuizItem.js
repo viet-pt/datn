@@ -6,6 +6,8 @@ import { TITLE_ANS } from 'constants/constants';
 import React, { useState } from 'react';
 const { Option } = Select;
 
+const MAX_ANS = 6;
+
 const QuizItem = ({ fields, form, index, onDelete, typeList }) => {
   const [numbAns, setNumberAns] = useState(4);
 
@@ -94,7 +96,7 @@ const QuizItem = ({ fields, form, index, onDelete, typeList }) => {
                   }
                 </div>
               ))}
-              {answer.length < 5 &&
+              {answer.length < MAX_ANS &&
                 <div className='text-gray-400'>
                   <span>{TITLE_ANS[answer.length]}. </span>
                   <span className='underline pointer ml-3' onClick={() => handleAddAnswer(add, answer)}>Thêm tùy chọn</span></div>
