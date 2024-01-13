@@ -14,7 +14,7 @@ const CategoryDetail = () => {
         placeholder="Nhập mã danh mục" customClass='mt-3'
       />
       <InputForm
-        name="description" isRequired
+        name="description"
         placeholder="Mô tả" customClass='mt-3'
       />
     </div>

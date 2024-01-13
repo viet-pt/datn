@@ -142,7 +142,7 @@ const NewQuiz = () => {
       </div>
 
       <div className='w-2/3 p-4 bg-gray-50 rounded-lg text-base'>
-        <p className='medium uppercase'>Danh sách câu hỏi</p>
+        <p className='medium uppercase mb-5'>Danh sách câu hỏi</p>
 
         <Form.List name="data" initialValue={[
           { question: "Câu hỏi 1" },
@@ -204,7 +204,7 @@ const NewQuiz = () => {
 
       {quizUpload.length ?
         <div className='w-2/3 p-4 bg-gray-50 rounded-lg text-base'>
-          <p className='medium uppercase'>Danh sách câu hỏi</p>
+          <p className='medium uppercase mb-5'>Danh sách câu hỏi</p>
           {quizUpload.map((item, index) => (
             <QuizDetail key={index} data={item} index={index + 1} />
           ))}

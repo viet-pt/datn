@@ -14,7 +14,7 @@ const TypeDetail = () => {
         placeholder="Nhập mã thể loại" customClass='mt-3'
       />
       <InputForm
-        name="description" isRequired
+        name="description"
         placeholder="Mô tả" customClass='mt-3'
       />
     </div>
