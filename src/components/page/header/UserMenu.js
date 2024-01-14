@@ -6,7 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { removeUser } from 'redux/action/userAction';
+import Cookies from 'universal-cookie';
 import Transition from 'utils/Transition';
+import { storageKey } from 'utils/storageKey';
+
+const cookies = new Cookies();
 
 function UserMenu() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -40,6 +44,7 @@ function UserMenu() {
   const handleLogout = () => {
     setDropdownOpen(!dropdownOpen);
     dispatch(removeUser());
+    cookies.remove(storageKey.ACCESS_TOKEN);
     history.push(ROUTES.LOGIN);
   }
 

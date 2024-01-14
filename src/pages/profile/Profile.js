@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { InputForm, KCSFormModal, Notification, DropdownForm } from 'components/common';
 import { Button } from 'antd';
 import { UserService } from 'api/UserService';
 import { Queries } from 'api/queries';
+import { DropdownForm, InputForm, KCSFormModal, Notification } from 'components/common';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 
 const UserDetail = ({ groupList }) => {
@@ -45,11 +45,9 @@ const Profile = () => {
 
   const { mutate: mutateChangePass } = useMutation(UserService.personalChangPass, {
     onSuccess: (res) => {
-      if (res.errorCode === 0) {
+      if (res.success) {
         Notification.success('Thay đổi mật khẩu thành công!')
         setOpenModalChangePass(false);
-      } else if (res.errorCode === 4002) {
-        Notification.error('Mật khẩu hiện tại không đúng!')
       } else {
         Notification.error(res.message);
       }
@@ -70,7 +68,7 @@ const Profile = () => {
 
   const onUpdate = (values) => {
     UserService.personalUpdate(values, res => {
-      if (res.errorCode === 0) {
+      if (res.success) {
         Notification.success('Update thông tin cá nhân thành công!')
         setOpenModalUpdateInfo(false);
         refetch();

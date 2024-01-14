@@ -6,18 +6,14 @@ import { TITLE_ANS } from 'constants/constants';
 import React, { useEffect, useState } from 'react';
 const { Option } = Select;
 
-const typeList = [
-  { value: 'TECH', text: 'Công nghệ và đời sống' },
-  { value: 'COMPUTER', text: 'Máy tính' },
-  { value: 'MEDIA', text: 'Media' },
-]
-
-const QuizEdit = ({ data, visible, closeModal, confirmAction }) => {
+const QuizEdit = ({ data, cateList, visible, closeModal, confirmAction }) => {
   const [numbAns, setNumberAns] = useState(4);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setNumberAns(data.answer.length);
+    if (data.answer) {
+      setNumberAns(data?.answer.length);
+    }
     form.setFieldsValue(data);
   }, [data, form]);
 
@@ -70,7 +66,7 @@ const QuizEdit = ({ data, visible, closeModal, confirmAction }) => {
               isRequired
               placeholder="Thể loại"
               customClass='quiz'
-              list={typeList}
+              list={cateList}
             />
           </div>
 

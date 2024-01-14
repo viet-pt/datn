@@ -1,10 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Upload } from 'antd';
+import { NewsService } from 'api/NewsService';
 import { DropdownForm, InputForm, KCSModal, Notification } from 'components/common';
 import MyCustomUploadAdapterPlugin from 'components/common/UploadAdapter/UploadAdapter';
 import NewsDemo from 'components/page/article/NewsDemo';
-import { FAKE_CATE } from 'constants/constants';
+import { URL_WEB } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -18,9 +19,16 @@ const NewArticle = () => {
   const history = useHistory();
   const [form] = Form.useForm();
 
+  const { data: cates } = NewsService.useGetCategory({ params: {} });
+
   useEffect(() => {
-    const cates = FAKE_CATE.map(item => ({ value: item.cateCode, text: item.cateName }));
-    setCateList(cates);
+    if (cates?.length) {
+      const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      setCateList(arr);
+    }
+  }, [cates])
+
+  useEffect(() => {
     ClassicEditor.create(document.querySelector('#editorCreate'), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
     })
@@ -41,17 +49,42 @@ const NewArticle = () => {
     }
     const data = {
       ...values,
+      status: "show",
       content
     }
-    console.log(1111, data);
-    history.push(ROUTES.ARTICLE_MANAGEMENT);
+    handleUploadFile(data);
   };
+
+  const handleUploadFile = (data) => {
+    NewsService.uploadFile(data.thumbnail, res => {
+      if (res.success) {
+        let body = {
+          ...data,
+          thumbnail: `${URL_WEB}/${res.data.link}`
+        }
+        createNews(body);
+      } else {
+        Notification.error(res.message);
+      }
+    })
+  }
+
+  const createNews = (data) => {
+    NewsService.createNews(data, res => {
+      if (res.success) {
+        Notification.success('Thêm tin thành công!');
+        history.push(ROUTES.ARTICLE_MANAGEMENT);
+      } else {
+        Notification.error(res.message);
+      }
+    })
+  }
 
   const handleFile = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
-    return e?.fileList;
+    return e?.file;
   };
 
   const handleBack = () => {
@@ -86,7 +119,7 @@ const NewArticle = () => {
         </div>
         <div className='flex mb-4'>
           <Form.Item
-            name="img"
+            name="thumbnail"
             label="Image"
             rules={[{
               required: true,
@@ -103,7 +136,7 @@ const NewArticle = () => {
         <div className='flex-between'>
           <div className='w-1/4'>
             <DropdownForm
-              name='category'
+              name='cateId'
               list={cateList}
               title="Danh mục"
             />

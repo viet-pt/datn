@@ -40,17 +40,17 @@ const SidebarAnt = () => {
       <Menu theme="dark" defaultSelectedKeys={[]} mode="inline" style={{ fontWeight: 600 }}
         defaultOpenKeys={['news', 'quiz']}>
         <SubMenu key="news" icon={<BookOutlined />} title="Quản lý tin tức">
-          <Menu.Item key="news_cate" icon={<CalendarOutlined />} title='Quản lý danh mục'>
-            <Link to={ROUTES.CATEGORY_MANAGEMENT}>Quản lý danh mục</Link></Menu.Item>
-          <Menu.Item key="news_item" icon={<ContainerOutlined />} title='Quản lý tin đăng'>
-            <Link to={ROUTES.ARTICLE_MANAGEMENT}>Quản lý tin đăng</Link></Menu.Item>
+          <Menu.Item key="news_cate" icon={<CalendarOutlined />} title='Danh mục'>
+            <Link to={ROUTES.CATEGORY_MANAGEMENT}>Danh mục</Link></Menu.Item>
+          <Menu.Item key="news_item" icon={<ContainerOutlined />} title='Tin tức'>
+            <Link to={ROUTES.ARTICLE_MANAGEMENT}>Tin tức</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="quiz" icon={<ProjectOutlined />} title="Quản lý trắc nghiệm">
-          <Menu.Item key="quiz_type" icon={<WalletOutlined />} title='Quản lý thể loại'>
-            <Link to={ROUTES.QUIZ_TYPE}>Quản lý thể loại</Link></Menu.Item>
-          <Menu.Item key="quiz_item" icon={<ReadOutlined />} title='Quản lý quiz'>
-            <Link to={ROUTES.QUIZ_MANAGEMENT}>Quản lý quiz</Link></Menu.Item>
+          <Menu.Item key="quiz_type" icon={<WalletOutlined />} title='Thể loại'>
+            <Link to={ROUTES.QUIZ_TYPE}>Thể loại</Link></Menu.Item>
+          <Menu.Item key="quiz_item" icon={<ReadOutlined />} title='Quiz'>
+            <Link to={ROUTES.QUIZ_MANAGEMENT}>Quiz</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="statistical" icon={<LineChartOutlined />} title="Thống kê">

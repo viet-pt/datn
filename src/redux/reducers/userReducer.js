@@ -1,9 +1,10 @@
 import Cookies from 'universal-cookie';
+import { storageKey } from 'utils/storageKey';
 import { ADD_USER_INFO, REMOVE_USER_INFO } from '../constants';
 const cookies = new Cookies();
 
 const initialState = {
-  authorized: cookies.get('token') ? true : false,
+  authorized: cookies.get(storageKey.ACCESS_TOKEN) ? true : false,
   data: null,
 };
 
@@ -17,7 +18,7 @@ export function userReducer(state = initialState, action) {
       };
     case REMOVE_USER_INFO:
       localStorage.removeItem('username');
-      cookies.remove('token');
+      cookies.remove(storageKey.ACCESS_TOKEN);
       
       return {
         authorized: false,

@@ -1,10 +1,5 @@
-import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfigFile from '../css/tailwind.config';
+import moment from 'moment';
 
-export const tailwindConfig = () => {
-  // Tailwind config
-  return resolveConfig(tailwindConfigFile)
-}
 
 export const hexToRGB = (h) => {
   let r = 0;
@@ -28,3 +23,10 @@ export const formatValue = (value) => Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 3,
   notation: 'compact',
 }).format(value);
+
+export const convertTime = (date, FORMAT_TIME) => {
+  if (!date) {
+    return date;
+  }
+  return moment(date).utc().format(FORMAT_TIME || "DD/MM/YYYY HH:mm");
+}

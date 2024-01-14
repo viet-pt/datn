@@ -35,7 +35,7 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
     if (Array.isArray(e)) {
       return e;
     }
-    return e?.fileList;
+    return e?.file;
   };
 
   const handleSubmit = (values) => {
@@ -44,11 +44,12 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
       Notification.warning('Content is required!');
       return;
     }
-    const data = {
+    const body = {
+      ...data,
       ...values,
       content,
     }
-    confirmAction(data);
+    confirmAction(body);
   }
 
   const onPreview = () => {
@@ -73,7 +74,7 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
         <div className='flex-between mb-3'>
           <div className='w-1/3'>
             <DropdownForm
-              name='category'
+              name='cateId'
               list={cateList}
               title="Danh mục"
             />
@@ -96,7 +97,7 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
         />
         <div className='mt-5'>
           <Form.Item
-            name="img"
+            name="thumbnail"
             label="Image"
             rules={[{
               required: true,
@@ -105,7 +106,7 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
             getValueFromEvent={handleFile}
           >
             <Upload name="files" beforeUpload={() => false} maxCount={1}
-              listType="picture" defaultFileList={[{ url: data.img }]}
+              listType="picture" defaultFileList={[{ url: data.thumbnail }]}
               onRemove={removeFile}>
               <Button icon={<UploadOutlined />} className="rounded-md">Upload image</Button>
             </Upload>

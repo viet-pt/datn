@@ -15,7 +15,8 @@ const Account = () => {
       {
         title: 'STT',
         dataIndex: 'index',
-        key: 'index'
+        key: 'index',
+        render: (value, record, index) => index + 1
       },
       {
         title: 'ID',

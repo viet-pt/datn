@@ -1,16 +1,17 @@
 import { DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
 import { Button, Table } from 'antd';
+import { QuizService } from 'api/QuizService';
 import { KCSFormModal, KCSModal, Notification } from 'components/common';
 import TypeDetail from 'components/page/quiz/TypeDetail';
-import { FAKE_TYPE } from 'constants/constants';
 import React, { useMemo, useState } from 'react';
-
-const cateList = FAKE_TYPE;
+import { convertTime } from 'utils/Utils';
 
 const QuizType = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [currentCate, setCurrentCate] = useState('');
+
+  const { data: cateList, refetch: refetchCate } = QuizService.useGetCategory({ params: {} });
 
   const columnsCate = useMemo(() => (
     [
@@ -18,16 +19,12 @@ const QuizType = () => {
         title: 'STT',
         dataIndex: 'index',
         key: 'index',
+        render: (value, record, index) => index + 1
       },
       {
         title: 'Tên loại',
-        dataIndex: 'typeName',
-        key: 'typeName',
-      },
-      {
-        title: 'Mã loại',
-        dataIndex: 'typeCode',
-        key: 'typeCode',
+        dataIndex: 'cateName',
+        key: 'cateName',
       },
       {
         title: 'Mô tả',
@@ -38,6 +35,7 @@ const QuizType = () => {
         title: 'Ngày tạo',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: (value) => convertTime(value)
       },
       {
         title: 'Action',
@@ -65,15 +63,47 @@ const QuizType = () => {
   }
 
   const confirmDeleteCate = () => {
-    Notification.success('Xóa danh mục thành công!');
-    setOpenModalDelete(false);
+    const data = { cateId: currentCate.cateId };
+    QuizService.deleteCategory(data, res => {
+      if (res.success) {
+        refetchCate();
+        Notification.success('Xóa thể loại thành công!');
+        setOpenModalDelete(false);
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
-  const onCreateCate = (values) => {
-    setOpenCreateModal(false);
-    Notification.success('Thêm câu hỏi thành công!')
-    console.log(1111, values);
-    // history.push(ROUTES.QUIZ_MANAGEMENT);
+  const onCreateEditCate = (values) => {
+    if (!values.description) {
+      values.description = '';
+    }
+    if (currentCate) {
+      const data = {
+        cateId: currentCate.cateId,
+        ...values
+      }
+      QuizService.updateCategory(data, res => {
+        if (res.success) {
+          setOpenCreateModal(false);
+          refetchCate();
+          Notification.success('Update thể loại thành công!');
+        } else {
+          Notification.error(res.message);
+        }
+      })
+    } else {
+      QuizService.createCategory(values, res => {
+        if (res.success) {
+          setOpenCreateModal(false);
+          refetchCate();
+          Notification.success('Thêm thể loại thành công!');
+        } else {
+          Notification.error(res.message);
+        }
+      })
+    }
   };
 
   const onOpenCreateModal = () => {
@@ -102,7 +132,7 @@ const QuizType = () => {
           title={currentCate ? "Sửa thể loại" : "Thêm mới thể loại"}
           confirmButton="Submit"
           closeModal={() => setOpenCreateModal(false)}
-          confirmAction={onCreateCate}
+          confirmAction={onCreateEditCate}
           initialValues={currentCate}
           content={
             <TypeDetail />
@@ -115,7 +145,7 @@ const QuizType = () => {
         closeModal={() => setOpenModalDelete(false)}
         confirmButton="Xóa"
         closeButton
-        content={<div className='text-center'>Bạn chắc chắn muốn xóa danh mục <span className='bold'>{currentCate.cateName}</span> ?</div>}
+        content={<div className='text-center'>Bạn chắc chắn muốn xóa thể loại <span className='bold'>{currentCate.cateName}</span> ?</div>}
         confirmAction={confirmDeleteCate}
       />
     </div>

@@ -1,17 +1,15 @@
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Pagination, Table, Tabs } from 'antd';
 import Search from 'antd/lib/input/Search';
-import { UserService } from 'api/UserService';
-import { Queries } from 'api/queries';
+import { NewsService } from 'api/NewsService';
 import { KCSModal, Notification } from 'components/common';
 import ArticleDetail from 'components/page/article/ArticleDetail';
 import EditArticle from 'components/page/article/EditArticle';
-import { ARTICLE_LIST, FAKE_CATE } from 'constants/constants';
+import { URL_WEB } from 'constants/constants';
 import { ROUTES } from 'global/routes';
-import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
+import { convertTime } from 'utils/Utils';
 
 const TAB_LIST = ['Đang hiển thị', 'Đang ẩn'];
 const ACTION_TYPE = {
@@ -21,7 +19,6 @@ const ACTION_TYPE = {
 }
 
 const Article = () => {
-  const [articleList, setArticleList] = useState(ARTICLE_LIST); //fake
   const [cateList, setCateList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -31,34 +28,33 @@ const Article = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [orderSelected, setOrderSelected] = useState('');
+  const [searchTxtShow, setSearchTxtShow] = useState('');
+  const [searchTxtHide, setSearchTxtHide] = useState('');
 
-  const { data: orderData, refetch: refetchOrder } = Queries.useGetOrder({ params: { page: pageIndex, status: tab, sort: 'createTime,desc' } });
-
-  useEffect(() => {
-    if (orderData?.errorCode === 0) {
-      setArticleList(orderData.data);
-      setTotalPage(orderData.totalItems);
+  const { data: articleListShow, refetch: refetchArticleListShow } = NewsService.useGetNews({
+    params:
+    {
+      pageNumber: pageIndex,
+      status: 'show',
+      title: searchTxtShow
     }
-  }, [orderData])
+  });
+  const { data: articleListHide, refetch: refetchArticleListHide } = NewsService.useGetNews({
+    params:
+    {
+      pageNumber: pageIndex,
+      status: 'hidden',
+      title: searchTxtHide
+    }
+  });
+  const { data: cates } = NewsService.useGetCategory({ params: {} });
 
   useEffect(() => {
-    getCateList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const { mutate: updateStatusOrder } = useMutation(UserService.updateStatusOrder, {
-    onSuccess: (res) => {
-      if (res?.errorCode === 0) {
-        Notification.success('Cập nhật trạng thái thành công!');
-        refetchOrder();
-      } else {
-        Notification.error(res?.message || 'Cập nhật thất bại!');
-      }
-    },
-    onError: (err) => {
-      Notification.error(err?.message || 'Cập nhật thất bại!');
-    },
-  });
+    if (cates?.length) {
+      const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      setCateList(arr);
+    }
+  }, [cates])
 
   const viewDetail = useCallback((data) => {
     setOrderSelected(data);
@@ -77,17 +73,17 @@ const Article = () => {
   }, [])
 
   const handleShow = () => {
-    updateStatusOrder({
+    updateNews({
       ...orderSelected,
-      status: 1
-    });
+      status: 'show'
+    }, ACTION_TYPE.SHOW);
   }
 
   const handleHide = () => {
-    updateStatusOrder({
+    updateNews({
       ...orderSelected,
-      status: 0
-    });
+      status: 'hidden'
+    }, ACTION_TYPE.HIDE);
   }
 
   const columnsTable = useMemo(() => (
@@ -97,7 +93,7 @@ const Article = () => {
         dataIndex: 'index',
         key: 'index',
         width: '3%',
-        render: (row) => <span>{pageIndex * 10 + row}</span>,
+        render: (value, record, index) => <span>{pageIndex * 10 + index + 1}</span>,
       },
       {
         title: 'Tiêu đề',
@@ -114,13 +110,13 @@ const Article = () => {
       },
       {
         title: 'Danh mục',
-        key: 'category',
-        dataIndex: 'category',
+        key: 'cateName',
+        dataIndex: 'cateName',
       },
       {
         title: 'Thumbnail',
         key: 'thumbnail',
-        dataIndex: 'img',
+        dataIndex: 'thumbnail',
         width: '10%',
         render: (row) => <img alt='thumbnail' src={row} className='h-12 w-auto' />,
       },
@@ -128,8 +124,8 @@ const Article = () => {
         title: 'Ngày đăng',
         width: '10%',
         key: 'createTime',
-        dataIndex: 'convertCreateTime',
-        sorter: (a, b) => moment(a.convertCreateTime, 'DD/MM/YY hh:mm').unix() - moment(b.convertCreateTime, 'DD/MM/YY hh:mm').unix()
+        dataIndex: 'createTime',
+        render: (value) => convertTime(value)
       },
       {
         title: 'Action',
@@ -152,12 +148,52 @@ const Article = () => {
   ), [viewDetail, changeStatus, tab, pageIndex])
 
   const onSearch = (data) => {
-
+    if (tab) {
+      setSearchTxtHide(data);
+    } else {
+      setSearchTxtShow(data);
+    }
   }
 
   const onEdit = (values) => {
-    console.log('data: ', values);
-    setOpenEditModal(false);
+    if (typeof values.thumbnail === 'string' || values.thumbnail instanceof String) {
+      updateNews(values);
+    } else {
+      handleUploadFile(values);
+    }
+  }
+
+  const handleUploadFile = (data) => {
+    NewsService.uploadFile(data.thumbnail, res => {
+      if (res.success) {
+        let body = {
+          ...data,
+          thumbnail: `${URL_WEB}/${res.data.link}`
+        }
+        updateNews(body);
+      } else {
+        Notification.error(res.message);
+      }
+    })
+  }
+
+  const updateNews = (data, status) => {
+    const action = status === ACTION_TYPE.SHOW ? 'Hiển thị' : status === ACTION_TYPE.HIDE ? 'Ẩn' : 'Update';
+    NewsService.updateNews(data, res => {
+      if (res.success) {
+        Notification.success(`${action} tin thành công!`);
+        setOpenEditModal(false);
+        refetchArticleListHide();
+        refetchArticleListShow();
+
+        if (status) {
+          setOpenShowModal(false);
+          setOpenHideModal(false);
+        }
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
   const onChangeTab = (key) => {
@@ -166,12 +202,6 @@ const Article = () => {
 
   const changePage = (page) => {
     setPageIndex(page - 1);
-  }
-
-  const getCateList = () => {
-    if (cateList.length) return;
-    const cates = FAKE_CATE.map(item => ({ value: item.cateCode, text: item.cateName }));
-    setCateList(cates);
   }
 
   return (
@@ -203,7 +233,7 @@ const Article = () => {
               <div className='mt-10 shadow-md overflow-x-auto bg-white'>
                 <Table
                   columns={columnsTable}
-                  dataSource={articleList}
+                  dataSource={i ? articleListHide : articleListShow}
                   pagination={false}
                   rowKey="index"
                 />

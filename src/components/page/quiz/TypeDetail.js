@@ -6,12 +6,8 @@ const TypeDetail = () => {
   return (
     <div>
       <InputForm
-        name="typeName" isRequired
+        name="cateName" isRequired
         placeholder="Nhập tên thể loại"
-      />
-      <InputForm
-        name="typeCode" isRequired
-        placeholder="Nhập mã thể loại" customClass='mt-3'
       />
       <InputForm
         name="description"

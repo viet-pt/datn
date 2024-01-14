@@ -50,7 +50,7 @@ const QuizItem = ({ fields, form, index, onDelete, typeList }) => {
         </Form.Item>
 
         <DropdownForm
-          name={[index, "category"]}
+          name={[index, "cateName"]}
           isRequired
           placeholder="Thể loại"
           customClass='quiz'

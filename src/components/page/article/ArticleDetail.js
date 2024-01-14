@@ -41,7 +41,7 @@ const ArticleDetail = ({ data, cateList, visible, closeModal }) => {
         />
         <div className='mt-6 flex space-x-4'>
           <p><span className='text-red-500'>*</span> Image:</p>
-          <img alt={data.title} src={data.img} className='w-36 h-auto' />
+          <img alt={data.title} src={data.thumbnail} className='w-36 h-auto' />
         </div>
 
         <div className='mt-5'>

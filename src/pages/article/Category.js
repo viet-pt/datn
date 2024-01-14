@@ -1,16 +1,17 @@
 import { DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
 import { Button, Table } from 'antd';
+import { NewsService } from 'api/NewsService';
 import { KCSFormModal, KCSModal, Notification } from 'components/common';
 import CategoryDetail from 'components/page/article/CategoryDetail';
-import { FAKE_CATE } from 'constants/constants';
 import React, { useMemo, useState } from 'react';
-
-const cateList = FAKE_CATE;
+import { convertTime } from 'utils/Utils';
 
 const Category = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [currentCate, setCurrentCate] = useState('');
+
+  const { data: cateList, refetch: refetchCate } = NewsService.useGetCategory({ params: {} });
 
   const columnsCate = useMemo(() => (
     [
@@ -18,16 +19,12 @@ const Category = () => {
         title: 'STT',
         dataIndex: 'index',
         key: 'index',
+        render: (value, record, index) => index + 1
       },
       {
         title: 'Tên danh mục',
         dataIndex: 'cateName',
         key: 'cateName',
-      },
-      {
-        title: 'Mã danh mục',
-        dataIndex: 'cateCode',
-        key: 'cateCode',
       },
       {
         title: 'Mô tả',
@@ -37,7 +34,7 @@ const Category = () => {
       {
         title: 'Ngày tạo',
         dataIndex: 'createTime',
-        key: 'createTime',
+        render: (value) => convertTime(value)
       },
       {
         title: 'Action',
@@ -65,15 +62,47 @@ const Category = () => {
   }
 
   const confirmDeleteCate = () => {
-    Notification.success('Xóa danh mục thành công!');
-    setOpenModalDelete(false);
+    const data = { cateId: currentCate.cateId };
+    NewsService.deleteCategory(data, res => {
+      if (res.success) {
+        refetchCate();
+        Notification.success('Xóa danh mục thành công!');
+        setOpenModalDelete(false);
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
-  const onCreateCate = (values) => {
-    setOpenCreateModal(false);
-    Notification.success('Thêm câu hỏi thành công!')
-    console.log(1111, values);
-    // history.push(ROUTES.QUIZ_MANAGEMENT);
+  const onCreateEditCate = (values) => {
+    if (!values.description) {
+      values.description = '';
+    }
+    if (currentCate) {
+      const data = {
+        cateId: currentCate.cateId,
+        ...values
+      }
+      NewsService.updateCategory(data, res => {
+        if (res.success) {
+          setOpenCreateModal(false);
+          refetchCate();
+          Notification.success('Update danh mục thành công!');
+        } else {
+          Notification.error(res.message);
+        }
+      })
+    } else {
+      NewsService.createCategory(values, res => {
+        if (res.success) {
+          setOpenCreateModal(false);
+          refetchCate();
+          Notification.success('Thêm danh mục thành công!');
+        } else {
+          Notification.error(res.message);
+        }
+      })
+    }
   };
 
   const onOpenCreateModal = () => {
@@ -92,7 +121,7 @@ const Category = () => {
 
       <Table
         columns={columnsCate}
-        dataSource={cateList}
+        dataSource={cateList.length ? cateList : []}
         rowKey="index"
       />
 
@@ -102,7 +131,7 @@ const Category = () => {
           title={currentCate ? "Sửa danh mục" : "Thêm mới danh mục"}
           confirmButton="Submit"
           closeModal={() => setOpenCreateModal(false)}
-          confirmAction={onCreateCate}
+          confirmAction={onCreateEditCate}
           initialValues={currentCate}
           content={
             <CategoryDetail />

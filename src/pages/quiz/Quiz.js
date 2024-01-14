@@ -1,16 +1,13 @@
 import { Button, Pagination, Table, Tabs } from 'antd';
 import Search from 'antd/lib/input/Search';
-import { UserService } from 'api/UserService';
-import { Queries } from 'api/queries';
+import { QuizService } from 'api/QuizService';
 import { KCSModal, Notification } from 'components/common';
 import QuizDetail from 'components/page/quiz/QuizDetail';
 import QuizEdit from 'components/page/quiz/QuizEdit';
-import { FAKE_TYPE, ORDER_LIST } from 'constants/constants';
 import { ROUTES } from 'global/routes';
-import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
+import { convertTime } from 'utils/Utils';
 
 const ACTION_TYPE = {
   SHOW: 'SHOW',
@@ -21,8 +18,7 @@ const ACTION_TYPE = {
 const TAB_LIST = ['Đang hiển thị', 'Đang ẩn'];
 
 const Quiz = () => {
-  const [orderList, setOrderList] = useState(ORDER_LIST); //fake
-  const [typeList, setTypeList] = useState([]);
+  const [cateList, setCateList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [tab, setTab] = useState(0);
@@ -31,40 +27,33 @@ const Quiz = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openHideModal, setOpenHideModal] = useState(false);
+  const [searchTxtShow, setSearchTxtShow] = useState('');
+  const [searchTxtHide, setSearchTxtHide] = useState('');
 
-  const { data: orderData, refetch: refetchOrder } = Queries.useGetOrder({ params: { page: pageIndex, status: tab, sort: 'createTime,desc' } });
-
-  useEffect(() => {
-    if (orderData?.errorCode === 0) {
-      setOrderList(orderData.data);
-      setTotalPage(orderData.totalItems);
+  const { data: quizListShow, refetch: refetchQuizListShow } = QuizService.useGetQuiz({
+    params:
+    {
+      pageNumber: pageIndex,
+      status: 'show',
+      title: searchTxtShow
     }
-  }, [orderData])
+  });
+  const { data: quizListHide, refetch: refetchQuizListHide } = QuizService.useGetQuiz({
+    params:
+    {
+      pageNumber: pageIndex,
+      status: 'hidden',
+      title: searchTxtHide
+    }
+  });
+  const { data: cates } = QuizService.useGetCategory({ params: {} });
 
   useEffect(() => {
-    getTypeList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const getTypeList = () => {
-    if (typeList.length) return;
-    const types = FAKE_TYPE.map(item => ({ value: item.typeCode, text: item.typeName }));
-    setTypeList(types);
-  }
-
-  const { mutate: updateStatusOrder } = useMutation(UserService.updateStatusOrder, {
-    onSuccess: (res) => {
-      if (res?.errorCode === 0) {
-        Notification.success('Cập nhật trạng thái thành công!');
-        refetchOrder();
-      } else {
-        Notification.error(res?.message || 'Cập nhật thất bại!');
-      }
-    },
-    onError: (err) => {
-      Notification.error(err?.message || 'Cập nhật thất bại!');
-    },
-  });
+    if (cates?.length) {
+      const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      setCateList(arr);
+    }
+  }, [cates])
 
   const viewDetailQuiz = useCallback((data) => {
     setOrderSelected(data);
@@ -83,17 +72,17 @@ const Quiz = () => {
   }, [])
 
   const handleShow = () => {
-    updateStatusOrder({
+    updateNews({
       ...orderSelected,
-      status: 1
-    });
+      status: 'show'
+    }, ACTION_TYPE.SHOW);
   }
 
   const handleHide = () => {
-    updateStatusOrder({
+    updateNews({
       ...orderSelected,
-      status: 0
-    });
+      status: 'hidden'
+    }, ACTION_TYPE.HIDE);
   }
 
   const columnsTable = useMemo(() => (
@@ -103,7 +92,7 @@ const Quiz = () => {
         dataIndex: 'index',
         key: 'index',
         width: '3%',
-        render: (row) => <span>{pageIndex * 10 + row}</span>,
+        render: (row, record, index) => <span>{pageIndex * 10 + index + 1}</span>,
       },
       {
         title: 'Câu hỏi',
@@ -120,24 +109,19 @@ const Quiz = () => {
       {
         title: 'Ngày tạo',
         key: 'createTime',
-        dataIndex: 'convertCreateTime',
-        sorter: (a, b) => moment(a.convertCreateTime, 'hh:mm DD/MM/YY').unix() - moment(b.convertCreateTime, 'hh:mm DD/MM/YY').unix()
+        dataIndex: 'createTime',
+        render: (value) => convertTime(value)
       },
       // {
-      //   title: 'Số lượt đã thi',
-      //   key: 'numberParticipant',
-      //   dataIndex: 'numberParticipant',
+      //   title: 'Số lượt pass',
+      //   key: 'passNumber',
+      //   dataIndex: 'passNumber',
       // },
-      {
-        title: 'Số lượt pass',
-        key: 'passNumber',
-        dataIndex: 'passNumber',
-      },
-      {
-        title: 'Số lượt fail',
-        key: 'failNumber',
-        dataIndex: 'failNumber',
-      },
+      // {
+      //   title: 'Số lượt fail',
+      //   key: 'failNumber',
+      //   dataIndex: 'failNumber',
+      // },
       {
         title: 'Action',
         key: 'action',
@@ -157,11 +141,29 @@ const Quiz = () => {
   ), [viewDetailQuiz, changeStatus, tab, pageIndex])
 
   const onSearch = (data) => {
-
+    if (tab) {
+      setSearchTxtHide(data);
+    } else {
+      setSearchTxtShow(data);
+    }
   }
 
-  const onEdit = (values) => {
-    console.log(111, values);
+  const updateNews = (values, status) => {
+    const action = status === ACTION_TYPE.SHOW ? 'Hiển thị' : status === ACTION_TYPE.HIDE ? 'Ẩn' : 'Update';
+    QuizService.updateQuiz(values, res => {
+      if (res.success) {
+        Notification.success(`${action} quiz thành công!`);
+        setOpenEditModal(false);
+        refetchQuizListHide();
+        refetchQuizListShow();
+        if (status) {
+          setOpenShowModal(false);
+          setOpenHideModal(false);
+        }
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
   const changePage = (page) => {
@@ -201,7 +203,7 @@ const Quiz = () => {
               <div className='mt-10 shadow-md overflow-x-auto bg-white'>
                 <Table
                   columns={columnsTable}
-                  dataSource={orderList}
+                  dataSource={i ? quizListHide : quizListShow}
                   pagination={false}
                   rowKey="index"
                 />
@@ -231,9 +233,10 @@ const Quiz = () => {
       {openEditModal &&
         <QuizEdit
           data={orderSelected}
+          cateList={cateList}
           visible={openEditModal}
           closeModal={() => setOpenEditModal(false)}
-          confirmAction={onEdit}
+          confirmAction={updateNews}
         />
       }
 
@@ -242,7 +245,7 @@ const Quiz = () => {
         closeModal={() => setOpenShowModal(false)}
         title="Hiển thị quiz"
         closeButton
-        content={<div>Bạn chắc chắn muốn hiển thị quiz: <span className='bold'>{orderSelected.title}</span> ?</div>}
+        content={<div>Bạn chắc chắn muốn hiển thị quiz: <span className='bold'>{orderSelected.question}</span> ?</div>}
         confirmAction={handleShow}
       />
 
@@ -251,10 +254,9 @@ const Quiz = () => {
         closeModal={() => setOpenHideModal(false)}
         title="Ẩn quiz"
         closeButton
-        content={<div>Bạn chắc chắn muốn ẩn quiz: <span className='bold'>{orderSelected.title}</span> ?</div>}
+        content={<div>Bạn chắc chắn muốn ẩn quiz: <span className='bold'>{orderSelected.question}</span> ?</div>}
         confirmAction={handleHide}
       />
-
     </div>
   );
 }

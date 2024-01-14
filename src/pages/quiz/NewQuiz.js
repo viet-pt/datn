@@ -1,6 +1,7 @@
 import { faPlusCircle, faUpload } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Tabs } from 'antd';
+import { QuizService } from 'api/QuizService';
 import { KCSModal, Notification } from 'components/common';
 import QuizDetail from 'components/page/quiz/QuizDetail';
 import QuizItem from 'components/page/quiz/QuizItem';
@@ -10,24 +11,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as XLSX from "xlsx";
 
-const typeList = [
-  { value: 'TECH', text: 'Công nghệ và đời sống' },
-  { value: 'COMPUTER', text: 'Máy tính' },
-  { value: 'MEDIA', text: 'Media' },
-]
-
 const ANS_VI = ['Đáp án 1', 'Đáp án 2', 'Đáp án 3', 'Đáp án 4', 'Đáp án 5', 'Đáp án 6'];
 
 const NewQuiz = () => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [cateList, setCateList] = useState([]);
   const [quizUpload, setQuizUpload] = useState([]);
   const history = useHistory();
   const [form] = Form.useForm();
   const fileInputRef = useRef();
 
-  useEffect(() => {
+  const { data: cates } = QuizService.useGetCategory({ params: {} });
 
-  }, []);
+  useEffect(() => {
+    if (cates?.length) {
+      const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      setCateList(arr);
+    }
+  }, [cates])
 
   const handleSubmit = (values) => {
     const data = values.data;
@@ -38,9 +39,14 @@ const NewQuiz = () => {
   };
 
   const callApiCreate = (data) => {
-    Notification.success('Thêm câu hỏi thành công!')
-    console.log(1111, data);
-    // history.push(ROUTES.QUIZ_MANAGEMENT);
+    QuizService.createQuiz(data, res => {
+      if (res) {
+        Notification.success('Thêm câu hỏi thành công!');
+        history.push(ROUTES.QUIZ_MANAGEMENT);
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
   const handleBack = () => {
@@ -87,7 +93,7 @@ const NewQuiz = () => {
     data.forEach(item => {
       const correctAnswer = getCorrectAnswer(item);
       const quiz = {
-        category: item['Danh mục'] || 'Khác',
+        cateName: item['Danh mục'] || 'Khác',
         question: item['Nội dung'],
         answer: getAnswer(item),
         correctAnswer,
@@ -156,7 +162,7 @@ const NewQuiz = () => {
                       index={index}
                       fields={fields}
                       form={form}
-                      typeList={typeList}
+                      typeList={cateList}
                       onDelete={() => remove(field.name)}
                     />
                   </div>

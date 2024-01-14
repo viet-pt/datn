@@ -8,9 +8,9 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchUser } from "redux/action/userAction";
-import Cookies from 'universal-cookie';
 
-const md5Hex = require('md5-hex');
+import Cookies from 'universal-cookie';
+import { storageKey } from "utils/storageKey";
 const cookies = new Cookies();
 const dd = 3 * 86400 * 1000;
 const d = new Date();
@@ -21,9 +21,9 @@ const Login = () => {
 
   const { mutate: onLogin } = useMutation(UserService.login, {
     onSuccess: (res) => {
-      if (res?.errorCode === 0) {
+      if (res?.success) {
         Notification.success('Đăng nhập thành công!');
-        storeData(res);
+        storeData(res.data);
         history.push(ROUTES.HOME_PAGE);
       } else {
         Notification.error(res?.message || 'Tài khoản hoặc mật khẩu không đúng!');
@@ -36,19 +36,16 @@ const Login = () => {
 
   const handleSubmit = (values) => {
     const data = {
-      email: values.email?.toLowerCase(),
-      password: md5Hex(values.password)
+      username: values.email?.toLowerCase(),
+      password: values.password,
+      id_token: ''
     };
-    console.log('data', data);
-    Notification.success('Đăng nhập thành công!');
-    storeData({ token: 'fake data' });
-    history.push(ROUTES.HOME_PAGE);
-    // onLogin(data);
+    onLogin(data);
   };
 
-  const storeData = (res) => {
+  const storeData = (data) => {
     d.setTime(d.getTime() + dd);
-    cookies.set('token', res.token, { path: '/', expires: d });
+    cookies.set(storageKey.ACCESS_TOKEN, data.access_token, { path: '/', expires: d });
     dispatch(fetchUser());
   }
 
