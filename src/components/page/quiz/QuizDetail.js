@@ -11,7 +11,7 @@ const QuizDetail = ({ data, index }) => {
         {data.question}
       </p>
       <div className='ml-6'>
-        {data.answer.map((item, i) => (
+        {data?.answer?.length && data.answer.map((item, i) => (
           <p className={cn({ 'medium text-red-500': data.correctAnswer.includes(TITLE_ANS[i]) })}>
             <span>{TITLE_ANS[i]}. </span>
             <span className='ml-1'>{item.label}</span>
