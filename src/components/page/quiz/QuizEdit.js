@@ -41,6 +41,14 @@ const QuizEdit = ({ data, cateList, visible, closeModal, confirmAction }) => {
     return newAnsArr;
   }
 
+  const onSubmit = (values) => {
+    const body = {
+      ...data,
+      ...values,
+    }
+    confirmAction(body);
+  }
+
   return (
     <Modal
       className="modal-wrapper"
@@ -50,7 +58,7 @@ const QuizEdit = ({ data, cateList, visible, closeModal, confirmAction }) => {
       footer={null}
       width={800}
     >
-      <Form onFinish={confirmAction} form={form}>
+      <Form onFinish={onSubmit} form={form}>
         <div className='text-base medium p-5'>
           <div className='flex space-x-3 mb-4'>
             <Form.Item
@@ -62,7 +70,7 @@ const QuizEdit = ({ data, cateList, visible, closeModal, confirmAction }) => {
             </Form.Item>
 
             <DropdownForm
-              name={"category"}
+              name="cateId"
               isRequired
               placeholder="Thể loại"
               customClass='quiz'

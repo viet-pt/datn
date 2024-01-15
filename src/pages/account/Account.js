@@ -1,14 +1,14 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Table } from 'antd';
+import { UserService } from 'api/UserService';
 import { KCSModal, Notification } from 'components/common';
-import { FAKE_ACCOUNT } from 'constants/constants';
 import React, { useMemo, useState } from 'react';
-
-const accountList = FAKE_ACCOUNT;
 
 const Account = () => {
   const [currentAcc, setCurrentAcc] = useState('');
   const [openModalDelete, setOpenModalDelete] = useState(false);
+
+  const { data: accountList, refetch: refetchAccountList } = UserService.useGetAccount({ params: {} });
 
   const columnsRole = useMemo(() => (
     [
@@ -30,19 +30,19 @@ const Account = () => {
       },
       {
         title: 'Tên',
-        dataIndex: 'name',
-        key: 'name'
+        dataIndex: 'username',
+        key: 'username'
       },
-      {
-        title: 'Google ID',
-        dataIndex: 'google_id',
-        key: 'google_id'
-      },
-      {
-        title: 'Create at',
-        dataIndex: 'create_at',
-        key: 'create_at'
-      },
+      // {
+      //   title: 'Google ID',
+      //   dataIndex: 'google_id',
+      //   key: 'google_id'
+      // },
+      // {
+      //   title: 'Create at',
+      //   dataIndex: 'create_at',
+      //   key: 'create_at'
+      // },
       {
         title: 'Action',
         key: 'action',
@@ -61,8 +61,16 @@ const Account = () => {
   }
 
   const confirmDelete = () => {
-    Notification.success('Xóa danh mục thành công!');
-    setOpenModalDelete(false);
+    const data = { cateId: currentAcc.id };
+    UserService.deleteAccount(data, res => {
+      if (res.success) {
+        refetchAccountList();
+        Notification.success('Xóa tài khoản thành công!');
+        setOpenModalDelete(false);
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
   return (

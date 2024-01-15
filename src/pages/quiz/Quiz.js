@@ -98,13 +98,15 @@ const Quiz = () => {
         title: 'Câu hỏi',
         dataIndex: 'question',
         key: 'question',
+        width: '50%',
         render: (value, row) => <span className='underline pointer text-blue-500 hover:text-green-500'
           onClick={() => viewDetailQuiz(row)}>{value}</span>
       },
       {
         title: 'Thể loại',
-        key: 'category',
-        dataIndex: 'category',
+        key: 'cateName',
+        dataIndex: 'cateName',
+        width: '15%',
       },
       {
         title: 'Ngày tạo',

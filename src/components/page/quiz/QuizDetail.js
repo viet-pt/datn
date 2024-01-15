@@ -5,7 +5,7 @@ import React from 'react';
 const QuizDetail = ({ data, index }) => {
   return (
     <div className={cn('mb-5', { 'mb-4 pb-4 border-b': index })}>
-      <p>Thể loại: <span className='medium'>{data.category}</span></p>
+      <p>Thể loại: <span className='medium'>{data.cateName}</span></p>
       <p className='medium'>
         {index && <span>{index}. </span>}
         {data.question}

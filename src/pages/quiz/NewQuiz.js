@@ -122,7 +122,11 @@ const NewQuiz = () => {
       return [];
     }
     ans = ans.split(',').map(item => (Number(item.trim())));
-    arr = ans.map(item => (TITLE_ANS[item - 1]));
+    ans.forEach(item => {
+      if (item) {
+        arr.push(TITLE_ANS[item - 1]);
+      }
+    });
     return arr;
   }
 

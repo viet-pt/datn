@@ -50,26 +50,21 @@ function logout(store) {
 function makeHttpRequest(apiCall, successCallBack, failCallBack, transformFunc) {
   const store = initializeStore();
   store.dispatch({ type: 'SHOW_PROGRESS' });
-  const state = store.getState();
 
   return new Promise(async () => {
     try {
       const response = await apiCall();
       store.dispatch({ type: 'HIDE_PROGRESS' });
-      if (response?.data?.errorCode === 403 && state?.userReducer?.authorized) {
-        logout(store);
-        return;
-      }
       const responseData = response.data;
       const successResponse = cui.isFunction(transformFunc) ? transformFunc(responseData) : responseData;
       successCallBack(successResponse);
-    } catch (e) {
+    } catch (error) {
       store.dispatch({ type: 'HIDE_PROGRESS' });
-      if (e?.response?.status === 401) {
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
         logout(store);
       }
       if (cui.isFunction(failCallBack)) {
-        failCallBack(handleHttpError(e));
+        failCallBack(handleHttpError(error));
       }
     }
   });
@@ -77,24 +72,19 @@ function makeHttpRequest(apiCall, successCallBack, failCallBack, transformFunc) 
 
 function makeHttpRequestNoLoading(apiCall, successCallBack, failCallBack, transformFunc) {
   const store = initializeStore();
-  const state = store.getState();
 
   return new Promise(async () => {
     try {
       const response = await apiCall();
-      if (response?.data?.errorCode === 403 && state?.userReducer?.authorized) {
-        logout(store);
-        return;
-      }
       const responseData = response.data;
       const successResponse = cui.isFunction(transformFunc) ? transformFunc(responseData) : responseData;
       successCallBack(successResponse);
-    } catch (e) {
-      if (e?.response?.status === 401) {
+    } catch (error) {
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
         logout(store);
       }
       if (cui.isFunction(failCallBack)) {
-        failCallBack(handleHttpError(e));
+        failCallBack(handleHttpError(error));
       }
     }
   });
@@ -119,20 +109,15 @@ export async function getServerRequest(url, config = {}) {
 export async function postServerRequest(url, data, config = { withCredentials: true }) {
   const store = initializeStore();
   store.dispatch({ type: 'SHOW_PROGRESS' });
-  const state = store.getState();
 
   try {
     const response = await axios.post(url, data, config);
     store.dispatch({ type: 'HIDE_PROGRESS' });
-    if (response?.data?.errorCode === 403 && state?.userReducer?.authorized) {
-      logout(store);
-      return;
-    }
     return response.data;
   } catch (error) {
     console.log('error', error);
     store.dispatch({ type: 'HIDE_PROGRESS' });
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
       logout(store);
     }
     return error?.response?.data;
@@ -142,19 +127,14 @@ export async function postServerRequest(url, data, config = { withCredentials: t
 export async function putServerRequest(url, data, config = {}) {
   const store = initializeStore();
   store.dispatch({ type: 'SHOW_PROGRESS' });
-  const state = store.getState();
 
   try {
     const response = await axios.put(url, data, config);
     store.dispatch({ type: 'HIDE_PROGRESS' });
-    if (response?.data?.errorCode === 403 && state?.userReducer?.authorized) {
-      logout(store);
-      return;
-    }
     return response.data;
   } catch (error) {
     store.dispatch({ type: 'HIDE_PROGRESS' });
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
       logout(store);
     }
     return error?.response?.data;
