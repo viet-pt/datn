@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Pagination, Table, Tabs } from 'antd';
+import { Button, Table, Tabs } from 'antd';
 import Search from 'antd/lib/input/Search';
 import { NewsService } from 'api/NewsService';
 import { KCSModal, Notification } from 'components/common';
@@ -20,8 +20,8 @@ const ACTION_TYPE = {
 
 const Article = () => {
   const [cateList, setCateList] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndexShow, setPageIndexShow] = useState(0);
+  const [pageIndexHide, setPageIndexHide] = useState(0);
   const [tab, setTab] = useState(0);
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openHideModal, setOpenHideModal] = useState(false);
@@ -34,7 +34,6 @@ const Article = () => {
   const { data: articleListShow, refetch: refetchArticleListShow } = NewsService.useGetNews({
     params:
     {
-      pageNumber: pageIndex,
       status: 'show',
       title: searchTxtShow
     }
@@ -42,7 +41,6 @@ const Article = () => {
   const { data: articleListHide, refetch: refetchArticleListHide } = NewsService.useGetNews({
     params:
     {
-      pageNumber: pageIndex,
       status: 'hidden',
       title: searchTxtHide
     }
@@ -93,7 +91,7 @@ const Article = () => {
         dataIndex: 'index',
         key: 'index',
         width: '3%',
-        render: (value, record, index) => <span>{pageIndex * 10 + index + 1}</span>,
+        render: (value, record, index) => <span>{(tab ? pageIndexHide : pageIndexShow) * 10 + index + 1}</span>,
       },
       {
         title: 'Tiêu đề',
@@ -145,7 +143,7 @@ const Article = () => {
 
       },
     ]
-  ), [viewDetail, changeStatus, tab, pageIndex])
+  ), [viewDetail, changeStatus, tab, pageIndexShow, pageIndexHide])
 
   const onSearch = (data) => {
     if (tab) {
@@ -200,10 +198,6 @@ const Article = () => {
     setTab(key);
   };
 
-  const changePage = (page) => {
-    setPageIndex(page - 1);
-  }
-
   return (
     <div>
       <div className='flex-between'>
@@ -234,18 +228,19 @@ const Article = () => {
                 <Table
                   columns={columnsTable}
                   dataSource={i ? articleListHide : articleListShow}
-                  pagination={false}
+                  pagination={{
+                    onChange: (page) => {
+                      if (i) {
+                        setPageIndexHide(page)
+                      } else {
+                        setPageIndexShow(page)
+                      }
+                    },
+                    position: ['bottomCenter']
+                  }}
                   rowKey="index"
                 />
               </div>
-
-              <Pagination
-                current={pageIndex + 1}
-                pageSize={10}
-                total={totalPage}
-                onChange={changePage}
-                className='mt-6 flex justify-center'
-              />
             </>
           )
         }))}

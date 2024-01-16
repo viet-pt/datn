@@ -1,6 +1,6 @@
 .progress-turn {
   @apply flex justify-center items-center fixed inset-0;
-  z-index: 1000;
+  z-index: 100000;
   background-color: rgba(255, 255, 255, 0.4);
   .ant-spin-lg .ant-spin-dot {
     font-size: 45px;

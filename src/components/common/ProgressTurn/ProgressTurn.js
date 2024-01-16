@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import './style.scss';
 import Spin from 'antd/es/spin';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import './style.scss';
 
 const ProgressTurn = ({ show }) => {
   const loading = useSelector(state => state.progressReducer.loading);

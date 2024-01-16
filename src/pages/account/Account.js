@@ -23,13 +23,13 @@ const Account = () => {
       },
       {
         title: 'Email',
-        dataIndex: 'email',
-        key: 'email'
+        dataIndex: 'username',
+        key: 'username'
       },
       {
         title: 'Tên',
-        dataIndex: 'username',
-        key: 'username'
+        dataIndex: 'first_name',
+        key: 'first_name'
       },
       // {
       //   title: 'Google ID',

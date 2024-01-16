@@ -1,4 +1,4 @@
-import { Button, Pagination, Table, Tabs } from 'antd';
+import { Button, Table, Tabs } from 'antd';
 import Search from 'antd/lib/input/Search';
 import { QuizService } from 'api/QuizService';
 import { KCSModal, Notification } from 'components/common';
@@ -19,8 +19,8 @@ const TAB_LIST = ['Đang hiển thị', 'Đang ẩn'];
 
 const Quiz = () => {
   const [cateList, setCateList] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndexShow, setPageIndexShow] = useState(0);
+  const [pageIndexHide, setPageIndexHide] = useState(0);
   const [tab, setTab] = useState(0);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [orderSelected, setOrderSelected] = useState('');
@@ -33,7 +33,6 @@ const Quiz = () => {
   const { data: quizListShow, refetch: refetchQuizListShow } = QuizService.useGetQuiz({
     params:
     {
-      pageNumber: pageIndex,
       status: 'show',
       title: searchTxtShow
     }
@@ -41,7 +40,6 @@ const Quiz = () => {
   const { data: quizListHide, refetch: refetchQuizListHide } = QuizService.useGetQuiz({
     params:
     {
-      pageNumber: pageIndex,
       status: 'hidden',
       title: searchTxtHide
     }
@@ -92,7 +90,7 @@ const Quiz = () => {
         dataIndex: 'index',
         key: 'index',
         width: '3%',
-        render: (row, record, index) => <span>{pageIndex * 10 + index + 1}</span>,
+        render: (row, record, index) => <span>{(tab ? pageIndexHide : pageIndexShow) * 10 + index + 1}</span>,
       },
       {
         title: 'Câu hỏi',
@@ -140,7 +138,7 @@ const Quiz = () => {
           </div>
       },
     ]
-  ), [viewDetailQuiz, changeStatus, tab, pageIndex])
+  ), [viewDetailQuiz, changeStatus, tab, pageIndexShow, pageIndexHide])
 
   const onSearch = (data) => {
     if (tab) {
@@ -166,10 +164,6 @@ const Quiz = () => {
         Notification.error(res.message);
       }
     })
-  }
-
-  const changePage = (page) => {
-    setPageIndex(page - 1);
   }
 
   const onChangeTab = (key) => {
@@ -206,18 +200,19 @@ const Quiz = () => {
                 <Table
                   columns={columnsTable}
                   dataSource={i ? quizListHide : quizListShow}
-                  pagination={false}
                   rowKey="index"
+                  pagination={{
+                    onChange: (page) => {
+                      if (i) {
+                        setPageIndexHide(page)
+                      } else {
+                        setPageIndexShow(page)
+                      }
+                    },
+                    position: ['bottomCenter']
+                  }}
                 />
               </div>
-
-              <Pagination
-                current={pageIndex + 1}
-                pageSize={10}
-                total={totalPage}
-                onChange={changePage}
-                className='mt-6 flex justify-center'
-              />
             </>
           )
         }))}

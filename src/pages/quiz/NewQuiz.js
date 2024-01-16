@@ -93,7 +93,7 @@ const NewQuiz = () => {
     data.forEach(item => {
       const correctAnswer = getCorrectAnswer(item);
       const quiz = {
-        cateName: item['Danh mục'] || 'Khác',
+        cateName: item['Danh mục'] || 'general',
         question: item['Nội dung'],
         answer: getAnswer(item),
         correctAnswer,
