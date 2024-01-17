@@ -19,6 +19,7 @@ const TAB_LIST = ['Đang hiển thị', 'Đang ẩn'];
 
 const Quiz = () => {
   const [cateList, setCateList] = useState([]);
+  const [cateFilter, setCateFilter] = useState([]);
   const [pageIndexShow, setPageIndexShow] = useState(0);
   const [pageIndexHide, setPageIndexHide] = useState(0);
   const [tab, setTab] = useState(0);
@@ -49,6 +50,8 @@ const Quiz = () => {
   useEffect(() => {
     if (cates?.length) {
       const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      const arr2 = cates.map(item => ({ value: item.cateName, text: item.cateName }));
+      setCateFilter(arr2);
       setCateList(arr);
     }
   }, [cates])
@@ -105,6 +108,8 @@ const Quiz = () => {
         key: 'cateName',
         dataIndex: 'cateName',
         width: '15%',
+        filters: cateFilter,
+        onFilter: (value, record) => record.cateName.indexOf(value) === 0,
       },
       {
         title: 'Ngày tạo',
@@ -138,7 +143,7 @@ const Quiz = () => {
           </div>
       },
     ]
-  ), [viewDetailQuiz, changeStatus, tab, pageIndexShow, pageIndexHide])
+  ), [viewDetailQuiz, changeStatus, tab, pageIndexShow, pageIndexHide, cateFilter])
 
   const onSearch = (data) => {
     if (tab) {
@@ -204,9 +209,9 @@ const Quiz = () => {
                   pagination={{
                     onChange: (page) => {
                       if (i) {
-                        setPageIndexHide(page)
+                        setPageIndexHide(page - 1)
                       } else {
-                        setPageIndexShow(page)
+                        setPageIndexShow(page - 1)
                       }
                     },
                     position: ['bottomCenter']

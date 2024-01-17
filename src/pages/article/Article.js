@@ -16,16 +16,19 @@ const ACTION_TYPE = {
   SHOW: 'SHOW',
   HIDE: 'HIDE',
   EDIT: 'EDIT',
+  DELETE: 'DELETE',
 }
 
 const Article = () => {
   const [cateList, setCateList] = useState([]);
+  const [cateFilter, setCateFilter] = useState([]);
   const [pageIndexShow, setPageIndexShow] = useState(0);
   const [pageIndexHide, setPageIndexHide] = useState(0);
   const [tab, setTab] = useState(0);
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openHideModal, setOpenHideModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [orderSelected, setOrderSelected] = useState('');
   const [searchTxtShow, setSearchTxtShow] = useState('');
@@ -50,7 +53,9 @@ const Article = () => {
   useEffect(() => {
     if (cates?.length) {
       const arr = cates.map(item => ({ value: item.cateId, text: item.cateName }));
+      const arr2 = cates.map(item => ({ value: item.cateName, text: item.cateName }));
       setCateList(arr);
+      setCateFilter(arr2);
     }
   }, [cates])
 
@@ -65,8 +70,10 @@ const Article = () => {
       setOpenShowModal(true);
     } else if (type === ACTION_TYPE.HIDE) {
       setOpenHideModal(true);
-    } else {
+    } else if (type === ACTION_TYPE.EDIT) {
       setOpenEditModal(true);
+    } else {
+      setOpenDeleteModal(true);
     }
   }, [])
 
@@ -82,6 +89,19 @@ const Article = () => {
       ...orderSelected,
       status: 'hidden'
     }, ACTION_TYPE.HIDE);
+  }
+
+  const handleDelete = () => {
+    NewsService.deleteNews(orderSelected, res => {
+      if (res.success) {
+        Notification.success(`Xóa tin thành công!`);
+        setOpenDeleteModal(false);
+        refetchArticleListHide();
+        refetchArticleListShow();
+      } else {
+        Notification.error(res.message);
+      }
+    })
   }
 
   const columnsTable = useMemo(() => (
@@ -110,6 +130,8 @@ const Article = () => {
         title: 'Danh mục',
         key: 'cateName',
         dataIndex: 'cateName',
+        filters: cateFilter,
+        onFilter: (value, record) => record.cateName.indexOf(value) === 0,
       },
       {
         title: 'Thumbnail',
@@ -134,16 +156,18 @@ const Article = () => {
             <Button type="primary" className='hover-raise bg-blue-400 border-none'
               onClick={() => changeStatus(ACTION_TYPE.EDIT, row)} icon={<EditOutlined />}>Edit</Button>
             {tab === 0 &&
-              <Button type="primary" className='hover-raise bg-prime-red border-none' danger onClick={() => changeStatus(ACTION_TYPE.HIDE, row)}>Hide</Button>
+              <Button type="primary" className='hover-raise bg-prime-orange border-none' danger onClick={() => changeStatus(ACTION_TYPE.HIDE, row)}>Hide</Button>
             }
             {tab === 1 &&
               <Button type="primary" className='hover-raise bg-prime-green border-none' onClick={() => changeStatus(ACTION_TYPE.SHOW, row)}>Show</Button>
             }
+            <Button type="primary" className='hover-raise bg-red-500 border-none'
+              onClick={() => changeStatus(ACTION_TYPE.DELETE, row)}>DELETE</Button>
           </div>
 
       },
     ]
-  ), [viewDetail, changeStatus, tab, pageIndexShow, pageIndexHide])
+  ), [viewDetail, changeStatus, tab, pageIndexShow, pageIndexHide, cateFilter])
 
   const onSearch = (data) => {
     if (tab) {
@@ -231,9 +255,9 @@ const Article = () => {
                   pagination={{
                     onChange: (page) => {
                       if (i) {
-                        setPageIndexHide(page)
+                        setPageIndexHide(page - 1)
                       } else {
-                        setPageIndexShow(page)
+                        setPageIndexShow(page - 1)
                       }
                     },
                     position: ['bottomCenter']
@@ -281,6 +305,15 @@ const Article = () => {
         closeButton
         content={<div>Bạn chắc chắn muốn ẩn bài viết: <span className='bold'>{orderSelected.title}</span> ?</div>}
         confirmAction={handleHide}
+      />
+
+      <KCSModal
+        isOpenModal={openDeleteModal}
+        closeModal={() => setOpenDeleteModal(false)}
+        title="Xóa bài viết"
+        closeButton
+        content={<div>Bạn chắc chắn muốn xóa bài viết: <span className='bold'>{orderSelected.title}</span> ?</div>}
+        confirmAction={handleDelete}
       />
     </div>
   );

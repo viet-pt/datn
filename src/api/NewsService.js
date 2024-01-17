@@ -28,6 +28,11 @@ export const NewsService = {
     return putRequest(URL, data, {}, successCallback, failCallback);
   },
 
+  deleteNews: function (data, successCallback, failCallback) {
+    const URL = `/post/post/${data.id}/`;
+    return deleteRequest(URL, data, {}, successCallback, failCallback);
+  },
+
   uploadFile: function (file, successCallback, failCallback) {
     const URL = '/post/attachment/upload/';
     let formData = new FormData();
