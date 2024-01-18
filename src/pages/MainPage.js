@@ -16,8 +16,7 @@ const Article = lazy(() => import('pages/article/Article'));
 const Category = lazy(() => import('pages/article/Category'));
 const NewArticle = lazy(() => import('pages/article/NewArticle'));
 
-const StatisticalNews = lazy(() => import('pages/statistical/StatisticalNews'));
-const StatisticalQuiz = lazy(() => import('pages/statistical/StatisticalQuiz'));
+const Statistical = lazy(() => import('pages/statistical/Statistical'));
 
 const Account = lazy(() => import('pages/account/Account'));
 const Profile = lazy(() => import('pages/profile/Profile'));
@@ -34,8 +33,7 @@ const LIST_PAGE = [
   { path: ROUTES.CATEGORY_MANAGEMENT, component: Category },
   { path: ROUTES.CREATE_ARTICLE, component: NewArticle },
 
-  { path: ROUTES.STATISTICAL_NEWS, component: StatisticalNews },
-  { path: ROUTES.STATISTICAL_QUIZ, component: StatisticalQuiz },
+  { path: ROUTES.STATISTICAL, component: Statistical },
 
   { path: ROUTES.MANAGE_ACCOUNT, component: Account },
   { path: ROUTES.PROFILE, component: Profile },

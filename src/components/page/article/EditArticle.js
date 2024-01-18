@@ -2,6 +2,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Form, Modal, Upload } from 'antd';
 import { DropdownForm, InputForm, Notification } from 'components/common';
+import { STATUS_QUIZ } from 'constants/constants';
 import React, { useEffect, useRef, useState } from 'react';
 import NewsDemo from './NewsDemo';
 
@@ -79,7 +80,14 @@ const EditArticle = ({ data, cateList, visible, closeModal, confirmAction }) => 
               title="Danh mục"
             />
           </div>
-          <Button type="primary" className='bg-prime-orange border-none py-4 px-8' onClick={onPreview}>Xem trước</Button>
+          <div className='w-1/3 ml-5'>
+            <DropdownForm
+              name='status'
+              list={STATUS_QUIZ}
+              title="Trạng thái"
+            />
+          </div>
+          <Button type="primary" className='bg-prime-orange border-none py-4 px-8 ml-auto' onClick={onPreview}>Xem trước</Button>
         </div>
 
 

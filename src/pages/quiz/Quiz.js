@@ -99,7 +99,7 @@ const Quiz = () => {
         title: 'Câu hỏi',
         dataIndex: 'question',
         key: 'question',
-        width: '50%',
+        width: '35%',
         render: (value, row) => <span className='underline pointer text-blue-500 hover:text-green-500'
           onClick={() => viewDetailQuiz(row)}>{value}</span>
       },
@@ -117,16 +117,16 @@ const Quiz = () => {
         dataIndex: 'createTime',
         render: (value) => convertTime(value)
       },
-      // {
-      //   title: 'Số lượt pass',
-      //   key: 'passNumber',
-      //   dataIndex: 'passNumber',
-      // },
-      // {
-      //   title: 'Số lượt fail',
-      //   key: 'failNumber',
-      //   dataIndex: 'failNumber',
-      // },
+      {
+        title: 'Số lượt trả lời đúng',
+        key: 'passNumber',
+        dataIndex: 'passNumber',
+      },
+      {
+        title: 'Số lượt trả lời sai',
+        key: 'failNumber',
+        dataIndex: 'failNumber',
+      },
       {
         title: 'Action',
         key: 'action',

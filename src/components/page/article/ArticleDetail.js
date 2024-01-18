@@ -1,5 +1,6 @@
 import { Form, Modal } from 'antd';
 import { DropdownForm, InputForm } from 'components/common';
+import { STATUS_QUIZ } from 'constants/constants';
 import React, { useEffect } from 'react';
 
 const ArticleDetail = ({ data, cateList, visible, closeModal }) => {
@@ -19,13 +20,23 @@ const ArticleDetail = ({ data, cateList, visible, closeModal }) => {
       width={1400}
     >
       <Form form={form}>
-        <div className='w-1/3 mb-3'>
-          <DropdownForm
-            name='category'
-            list={cateList}
-            title="Danh mục"
-            disabled
-          />
+        <div className='flex mb-3'>
+          <div className='w-1/3'>
+            <DropdownForm
+              name='cateId'
+              list={cateList}
+              title="Danh mục"
+              disabled
+            />
+          </div>
+          <div className='w-1/3 ml-5'>
+            <DropdownForm
+              name='status'
+              list={STATUS_QUIZ}
+              title="Trạng thái"
+              disabled
+            />
+          </div>
         </div>
         <InputForm
           isRequired disabled

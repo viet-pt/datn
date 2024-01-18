@@ -1,11 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Button, Form, Upload } from 'antd';
+import { Button, Checkbox, Form, Upload } from 'antd';
 import { NewsService } from 'api/NewsService';
 import { DropdownForm, InputForm, KCSModal, Notification } from 'components/common';
 import MyCustomUploadAdapterPlugin from 'components/common/UploadAdapter/UploadAdapter';
 import NewsDemo from 'components/page/article/NewsDemo';
-import { URL_WEB } from 'constants/constants';
+import { STATUS_QUIZ, URL_WEB } from 'constants/constants';
 import { ROUTES } from 'global/routes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -112,7 +112,7 @@ const NewArticle = () => {
   return (
     <div>
       <h1 className='text-xl medium text-prime-blue mb-0 mr-2'>Thêm tin tức</h1>
-      <Form name="basic" className="mt-4" onFinish={handleSubmit} form={form}>
+      <Form name="basic" className="mt-4" onFinish={handleSubmit} form={form} initialValues={{ status: 'show', sendEmail: true }}>
         <div className='flex justify-end space-x-6'>
           <Button type="link" className='bg-gray-200 text-black py-4 px-8' onClick={onCancel}>Cancel</Button>
           <Button type="primary" htmlType='submit' className='bg-green-500 py-4 px-8'>Submit</Button>
@@ -133,7 +133,7 @@ const NewArticle = () => {
           </Form.Item>
         </div>
 
-        <div className='flex-between'>
+        <div className='flex items-center'>
           <div className='w-1/4'>
             <DropdownForm
               name='cateId'
@@ -141,7 +141,18 @@ const NewArticle = () => {
               title="Danh mục"
             />
           </div>
-          <Button type="primary" className='bg-prime-orange border-none py-4 px-8' onClick={onPreview}>Xem trước</Button>
+          <div className='w-1/4 ml-5'>
+            <DropdownForm
+              name='status'
+              list={STATUS_QUIZ}
+              title="Trạng thái"
+            />
+          </div>
+          <Form.Item name="sendEmail"  valuePropName="checked" className='mb-0 ml-6'
+          >
+            <Checkbox>Gửi email sau khi đăng tin</Checkbox>
+          </Form.Item>
+          <Button type="primary" className='bg-prime-orange border-none py-4 px-8 ml-auto' onClick={onPreview}>Xem trước</Button>
         </div>
 
         <div className='grid grid-cols-2 gap-5'>

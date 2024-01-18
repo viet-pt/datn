@@ -20,6 +20,14 @@ export const UserService = {
     }, { ...options, placeholderData: [] });
   },
 
+  useGetStatistic: function (params, options) {
+    const URL = '/user/statistic/';
+    return useQuery([URL, params], async () => {
+      const res = await getServerRequest(URL, params);
+      return res;
+    }, { ...options, placeholderData: {} });
+  },
+
 
 }
 

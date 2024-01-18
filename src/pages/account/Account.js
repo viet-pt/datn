@@ -1,12 +1,15 @@
-import { Table } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Table } from 'antd';
 import { UserService } from 'api/UserService';
-import React, { useMemo } from 'react';
+import { KCSModal, Notification } from 'components/common';
+import React, { useMemo, useState } from 'react';
+import { convertTime } from 'utils/Utils';
 
 const Account = () => {
-  // const [currentAcc, setCurrentAcc] = useState('');
-  // const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [currentAcc, setCurrentAcc] = useState('');
+  const [openModalDelete, setOpenModalDelete] = useState(false);
 
-  const { data: accountList } = UserService.useGetAccount({ params: {} });
+  const { data: accountList, refetch: refetchAccountList } = UserService.useGetAccount({ params: {} });
 
   const columnsRole = useMemo(() => (
     [
@@ -31,45 +34,41 @@ const Account = () => {
         dataIndex: 'first_name',
         key: 'first_name'
       },
-      // {
-      //   title: 'Google ID',
-      //   dataIndex: 'google_id',
-      //   key: 'google_id'
-      // },
-      // {
-      //   title: 'Create at',
-      //   dataIndex: 'create_at',
-      //   key: 'create_at'
-      // },
-      // {
-      //   title: 'Action',
-      //   key: 'action',
-      //   width: '10%',
-      //   render: (row) =>
-      //     <div className='flex space-x-3 items-center'>
-      //       <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => onDelete(row)}>Xóa</Button>
-      //     </div>
-      // },
+      {
+        title: 'Thời gian tạo',
+        dataIndex: 'createAt',
+        key: 'createAt',
+        render: (value) => convertTime(value)
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        width: '10%',
+        render: (row) =>
+          <div className='flex space-x-3 items-center'>
+            <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => onDelete(row)}>Xóa</Button>
+          </div>
+      },
     ]
   ), [])
 
-  // const onDelete = (data) => {
-  //   setCurrentAcc(data);
-  //   setOpenModalDelete(true);
-  // }
+  const onDelete = (data) => {
+    setCurrentAcc(data);
+    setOpenModalDelete(true);
+  }
 
-  // const confirmDelete = () => {
-  //   const data = { cateId: currentAcc.id };
-  //   UserService.deleteAccount(data, res => {
-  //     if (res.success) {
-  //       refetchAccountList();
-  //       Notification.success('Xóa tài khoản thành công!');
-  //       setOpenModalDelete(false);
-  //     } else {
-  //       Notification.error(res.message);
-  //     }
-  //   })
-  // }
+  const confirmDelete = () => {
+    const data = { id: currentAcc.id };
+    UserService.deleteAccount(data, res => {
+      if (res.success) {
+        refetchAccountList();
+        Notification.success('Xóa tài khoản thành công!');
+        setOpenModalDelete(false);
+      } else {
+        Notification.error(res.message);
+      }
+    })
+  }
 
   return (
     <div>
@@ -83,14 +82,14 @@ const Account = () => {
         rowKey="index"
       />
 
-      {/* <KCSModal
+      <KCSModal
         isOpenModal={openModalDelete}
         closeModal={() => setOpenModalDelete(false)}
         confirmButton="Xóa"
         closeButton
         content={<div className='text-center'>Bạn chắc chắn muốn xóa tài khoản <span className='bold'>{currentAcc.email}</span> ?</div>}
         confirmAction={confirmDelete}
-      /> */}
+      />
     </div>
   )
 }

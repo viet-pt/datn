@@ -1,9 +1,7 @@
 import {
-  BarChartOutlined,
   BookOutlined,
   CalendarOutlined,
   ContainerOutlined,
-  FundOutlined,
   LineChartOutlined,
   ProjectOutlined,
   ReadOutlined,
@@ -53,12 +51,8 @@ const SidebarAnt = () => {
             <Link to={ROUTES.QUIZ_MANAGEMENT}>Quiz</Link></Menu.Item>
         </SubMenu>
 
-        <SubMenu key="statistical" icon={<LineChartOutlined />} title="Thống kê">
-          <Menu.Item key="statistical_news" icon={<FundOutlined />} title='Thống kê tin tức'>
-            <Link to={ROUTES.STATISTICAL_NEWS}>Thống kê tin tức</Link></Menu.Item>
-          <Menu.Item key="statistical_quiz" icon={<BarChartOutlined />} title='Thống kê trắc nghiệm'>
-            <Link to={ROUTES.STATISTICAL_QUIZ}>Thống kê trắc nghiệm</Link></Menu.Item>
-        </SubMenu>
+        <Menu.Item key="statistical" icon={<LineChartOutlined />} title='Thống kê'>
+          <Link to={ROUTES.STATISTICAL}>Thống kê</Link></Menu.Item>
 
         <Menu.Item key="user" icon={<UserOutlined />} title='Quản lý tài khoản'>
           <Link to={ROUTES.MANAGE_ACCOUNT}>Quản lý tài khoản</Link></Menu.Item>

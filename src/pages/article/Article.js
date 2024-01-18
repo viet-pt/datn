@@ -117,14 +117,14 @@ const Article = () => {
         title: 'Tiêu đề',
         key: 'title',
         dataIndex: 'title',
-        width: '25%',
+        width: '20%',
         render: (row, record) => <span className='underline pointer text-blue-500' onClick={() => viewDetail(record)}>{row}</span>
       },
       {
         title: 'Mô tả',
         key: 'description',
         dataIndex: 'description',
-        width: '25%',
+        width: '20%',
       },
       {
         title: 'Danh mục',
@@ -148,6 +148,12 @@ const Article = () => {
         render: (value) => convertTime(value)
       },
       {
+        title: 'Thời gian update',
+        key: 'updateTime',
+        dataIndex: 'updateTime',
+        render: (value) => convertTime(value)
+      },
+      {
         title: 'Action',
         key: 'action',
         width: '10%',
@@ -162,7 +168,7 @@ const Article = () => {
               <Button type="primary" className='hover-raise bg-prime-green border-none' onClick={() => changeStatus(ACTION_TYPE.SHOW, row)}>Show</Button>
             }
             <Button type="primary" className='hover-raise bg-red-500 border-none'
-              onClick={() => changeStatus(ACTION_TYPE.DELETE, row)}>DELETE</Button>
+              onClick={() => changeStatus(ACTION_TYPE.DELETE, row)}>Delete</Button>
           </div>
 
       },
