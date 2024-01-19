@@ -1,6 +1,6 @@
-import React from 'react';
-import { Modal, Button } from 'antd';
+import { Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const KCSModal = ({ isOpenModal, title, content, closeButton, closeModal, confirmButton, confirmAction, size }) => {
   let btn = [
@@ -8,7 +8,7 @@ const KCSModal = ({ isOpenModal, title, content, closeButton, closeModal, confir
   ]
 
   if (closeButton) {
-    btn = [<Button key="cancel" onClick={closeModal}>{closeButton === true ? 'Hủy' : closeButton}</Button>, ...btn];
+    btn = [<Button key="cancel" onClick={closeModal} className='mr-5'>{closeButton === true ? 'Hủy' : closeButton}</Button>, ...btn];
   }
 
   return (

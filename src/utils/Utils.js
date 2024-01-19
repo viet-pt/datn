@@ -11,5 +11,5 @@ export const convertTime = (date, FORMAT_TIME) => {
   if (!date) {
     return date;
   }
-  return moment(date).utc().format(FORMAT_TIME || "DD/MM/YYYY HH:mm");
+  return moment(date).format(FORMAT_TIME || "DD/MM/YYYY HH:mm");
 }

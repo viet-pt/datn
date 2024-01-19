@@ -36,8 +36,8 @@ const Account = () => {
       },
       {
         title: 'Thời gian tạo',
-        dataIndex: 'createAt',
-        key: 'createAt',
+        dataIndex: 'createTime',
+        key: 'createTime',
         render: (value) => convertTime(value)
       },
       {

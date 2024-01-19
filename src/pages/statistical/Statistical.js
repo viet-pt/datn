@@ -14,27 +14,31 @@ const Statistical = () => {
       <h1 className='text-xl medium text-prime-blue mb-6 mr-2'>Thống kê</h1>
       <section className='grid grid-cols-3 gap-x-10 gap-y-6 bg-gray-100 p-8 medium text-lg rounded-lg'>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
-          {statistic.user?.total} User
+          {statistic?.user?.total?.toLocaleString('en-GB')} Người dùng
         </div>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
-          {statistic.post?.total[0]} News
+          {statistic?.post?.total?.toLocaleString('en-GB')} Tin tức
         </div>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
-          {statistic.quiz?.total} Quiz
+          {statistic?.quiz?.questionTotal?.toLocaleString('en-GB')} Câu hỏi
         </div>
       </section>
 
       <section className='grid grid-cols-3 gap-10 bg-gray-100 p-8 pt-0 text-base'>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
-          Người dùng mới: {statistic.user?.new}
+          Người dùng mới: {statistic?.user?.new?.toLocaleString('en-GB')}
         </div>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
           <ul>
-            <li>Truy cập: {statistic.post?.view_total}</li>
+            <li>Truy cập: {statistic?.post?.view_total?.toLocaleString('en-GB')}</li>
 
           </ul>
           <table className='border'>
-            {statistic.post?.categories?.map(item => (
+            <tr className='bg-gray-200 medium'>
+              <td className='border px-3 py-1'>Danh mục</td>
+              <td className='border px-3 py-1'>Số lượt truy cập</td>
+            </tr>
+            {statistic?.post?.categories?.map(item => (
               <tr key={item.cateName}>
                 <td className='border px-3 py-1'>{item.cateName}</td>
                 <td className='border px-3 py-1'>{item.viewTotal}</td>
@@ -44,10 +48,10 @@ const Statistical = () => {
           </table>
         </div>
         <div className='shadow-lg p-5 rounded-lg bg-white text-base'>
-          {/* <p className='mb-2'>Tổng: {statistic.quiz?.total} Quiz</p> */}
-          <p className='mb-2'>Ngẫu nhiên: {statistic.quiz?.singleQuestion} Quiz</p>
-          <p className='mb-2'>Kiểm tra: {statistic.quiz?.multipleQuestion} Quiz</p>
-          
+          <p className='mb-5'>Tổng số lượt thi: {statistic?.quiz ? (statistic.quiz?.singleQuiz + statistic?.quiz?.multipleQuiz)?.toLocaleString('en-GB') : ''}</p>
+          <p className='mb-2'>Ngẫu nhiên: {statistic?.quiz?.singleQuiz?.toLocaleString('en-GB')}</p>
+          <p className='mb-2'>Kiểm tra: {statistic?.quiz?.multipleQuiz?.toLocaleString('en-GB')}</p>
+
         </div>
       </section>
 

@@ -12,7 +12,7 @@ import { fetchUser } from "redux/action/userAction";
 import Cookies from 'universal-cookie';
 import { storageKey } from "utils/storageKey";
 const cookies = new Cookies();
-const dd = 6 * 3600 * 1000;
+const dd = 4 * 3600 * 1000;
 const d = new Date();
 
 const Login = () => {

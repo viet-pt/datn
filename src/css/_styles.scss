@@ -326,9 +326,6 @@ body > iframe[style*='2147483647']{
   }
   .ant-modal-footer {
     @apply flex justify-center;
-    button:first-child {
-      margin-right: 5%;
-    }
   }
 }
 
