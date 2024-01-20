@@ -1,4 +1,6 @@
 import { EditOutlined } from '@ant-design/icons';
+import { faMinusCircle, faPlusCircle } from '@fortawesome/fontawesome-free-solid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Table, Tabs } from 'antd';
 import Search from 'antd/lib/input/Search';
 import { NewsService } from 'api/NewsService';
@@ -33,6 +35,7 @@ const Article = () => {
   const [orderSelected, setOrderSelected] = useState('');
   const [searchTxtShow, setSearchTxtShow] = useState('');
   const [searchTxtHide, setSearchTxtHide] = useState('');
+  const [showStatistic, setShowStatistic] = useState(false);
 
   const { data: articleListShow, refetch: refetchArticleListShow } = NewsService.useGetNews({
     params:
@@ -49,6 +52,7 @@ const Article = () => {
     }
   });
   const { data: cates } = NewsService.useGetCategory({ params: {} });
+  const { data: statisticNews } = NewsService.useStatisticNews({ params: {} });
 
   useEffect(() => {
     if (cates?.length) {
@@ -175,6 +179,28 @@ const Article = () => {
     ]
   ), [viewDetail, changeStatus, tab, pageIndexShow, pageIndexHide, cateFilter])
 
+  const columnsStatistic = useMemo(() => (
+    [
+      {
+        title: 'STT',
+        dataIndex: 'index',
+        key: 'index',
+        width: '3%',
+        render: (value, record, index) => index + 1,
+      },
+      {
+        title: 'Danh mục',
+        key: 'cateName',
+        dataIndex: 'cateName',
+      },
+      {
+        title: 'Số lượng tin',
+        key: 'postNum',
+        dataIndex: 'postNum',
+      }
+    ]
+  ), [])
+
   const onSearch = (data) => {
     if (tab) {
       setSearchTxtHide(data);
@@ -230,13 +256,31 @@ const Article = () => {
 
   return (
     <div>
-      <div className='flex-between'>
-        <h1 className='text-xl medium text-prime-blue mb-6 mr-2'>Quản lý tin tức</h1>
+      <h1 className='text-xl medium text-prime-blue mb-6 mr-2'>Quản lý tin tức</h1>
+      <div className='flex-between mb-4'>
+        <div className='w-1/4'>
+          <div className='flex-center border py-1.5 w-full shadow-5 hover:bg-gray-100 pointer' onClick={() => setShowStatistic(!showStatistic)}>
+            <FontAwesomeIcon icon={showStatistic ? faMinusCircle : faPlusCircle} className='text-blue-500 w-5 h-auto mr-3' />
+            <span className='text-lg medium'>{statisticNews.total} tin tức</span>
+          </div>
+
+          {showStatistic &&
+            <Table
+              columns={columnsStatistic}
+              dataSource={statisticNews.category}
+              pagination={false}
+              rowKey="index"
+              className='mt-4 shadow-7 table-striped-rows'
+            />
+          }
+        </div>
+
         <Link to={ROUTES.CREATE_ARTICLE}>
-          <Button className={`bg-prime-orange h-9 mt-5 rounded border-prime-orange hover-scale`} type='primary'>
+          <Button className={`bg-prime-orange h-9 rounded border-prime-orange hover-scale`} type='primary'>
             Thêm tin tức</Button>
         </Link>
       </div>
+
 
       <Tabs
         onChange={onChangeTab}

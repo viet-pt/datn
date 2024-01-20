@@ -57,5 +57,13 @@ export const NewsService = {
     }, { ...options, placeholderData: [] });
   },
 
+  useStatisticNews: function (params, options) {
+    const URL = '/post/post/statistic/';
+    return useQuery([URL, params], async () => {
+      const res = await getServerRequest(URL, params);
+      return res;
+    }, { ...options, placeholderData: [] });
+  },
+
 }
 
