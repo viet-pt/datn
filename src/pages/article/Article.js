@@ -270,7 +270,7 @@ const Article = () => {
               dataSource={statisticNews.category}
               pagination={false}
               rowKey="index"
-              className='mt-4 shadow-7 table-striped-rows'
+              className='mt-4 shadow-7 table-striped-rows max-h-80 overflow-auto'
             />
           }
         </div>
