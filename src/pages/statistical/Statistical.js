@@ -29,10 +29,7 @@ const Statistical = () => {
           Người dùng mới: {statistic?.user?.new?.toLocaleString('en-GB')}
         </div>
         <div className='shadow-lg p-5 rounded-lg bg-white'>
-          <ul>
-            <li>Truy cập: {statistic?.post?.view_total?.toLocaleString('en-GB')}</li>
-
-          </ul>
+          <p className='mb-2'>Truy cập: {statistic?.post?.view_total?.toLocaleString('en-GB')}</p>
           <table className='border'>
             <tr className='bg-gray-200 medium'>
               <td className='border px-3 py-1'>Danh mục</td>

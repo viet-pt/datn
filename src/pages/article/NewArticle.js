@@ -101,6 +101,8 @@ const NewArticle = () => {
       ...form.getFieldsValue(),
       content: editor.current.getData()
     }
+    const cateName = cateList.find(item => item.value === data.cateId).text;
+    data.cateName = cateName;
     setNewsData(data);
     setOpenPreviewModal(true);
   }

@@ -332,3 +332,23 @@ body > iframe[style*='2147483647']{
 .z-1000 {
   z-index: 1000;
 }
+
+.quiz-detail {
+  .ant-radio-disabled + span, .ant-checkbox-disabled+span {
+    color: black !important;
+  }
+}
+
+.content {
+  p, div, span {
+    line-height: 28px;
+    text-align: justify;
+  }
+  h2, h3 {
+    line-height: 32px;
+  }
+  img, table {
+    width: 100%;
+    margin: 12px 0;
+  }
+}

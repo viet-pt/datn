@@ -37,6 +37,9 @@ const SidebarAnt = () => {
 
       <Menu theme="dark" defaultSelectedKeys={[]} mode="inline" style={{ fontWeight: 600 }}
         defaultOpenKeys={['news', 'quiz']}>
+        <Menu.Item key="statistical" icon={<LineChartOutlined />} title='Thống kê'>
+          <Link to={ROUTES.STATISTICAL}>Thống kê</Link></Menu.Item>
+          
         <SubMenu key="news" icon={<BookOutlined />} title="Quản lý tin tức">
           <Menu.Item key="news_cate" icon={<CalendarOutlined />} title='Danh mục'>
             <Link to={ROUTES.CATEGORY_MANAGEMENT}>Danh mục</Link></Menu.Item>
@@ -51,8 +54,6 @@ const SidebarAnt = () => {
             <Link to={ROUTES.QUIZ_MANAGEMENT}>Quiz</Link></Menu.Item>
         </SubMenu>
 
-        <Menu.Item key="statistical" icon={<LineChartOutlined />} title='Thống kê'>
-          <Link to={ROUTES.STATISTICAL}>Thống kê</Link></Menu.Item>
 
         <Menu.Item key="user" icon={<UserOutlined />} title='Quản lý tài khoản'>
           <Link to={ROUTES.MANAGE_ACCOUNT}>Quản lý tài khoản</Link></Menu.Item>
